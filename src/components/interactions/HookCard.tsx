@@ -31,12 +31,12 @@ export const HookCard: React.FC<Props> = ({ data }) => {
             width: '52px',
             height: '52px',
             borderRadius: '16px',
-            background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(6, 182, 212, 0.2))',
-            border: '1px solid rgba(99, 102, 241, 0.3)',
+            background: 'var(--badge-indigo-bg)',
+            border: '1px solid var(--badge-indigo-border)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            color: '#818cf8'
+            color: 'var(--badge-indigo-text)'
           }}
         >
           <IconComponent size={26} />
@@ -49,9 +49,9 @@ export const HookCard: React.FC<Props> = ({ data }) => {
             style={{
               padding: '5px 12px',
               borderRadius: '20px',
-              background: 'rgba(16, 185, 129, 0.12)',
-              border: '1px solid rgba(16, 185, 129, 0.3)',
-              color: '#34d399',
+              background: 'var(--badge-emerald-bg)',
+              border: '1px solid var(--badge-emerald-border)',
+              color: 'var(--badge-emerald-text)',
               fontSize: '12px',
               fontWeight: 700
             }}
@@ -70,7 +70,7 @@ export const HookCard: React.FC<Props> = ({ data }) => {
           fontWeight: 800,
           lineHeight: 1.3,
           letterSpacing: '-0.02em',
-          color: '#f8fafc'
+          color: 'var(--text-main)'
         }}
       >
         "{data.headline}"
@@ -83,7 +83,7 @@ export const HookCard: React.FC<Props> = ({ data }) => {
         style={{
           fontSize: '14px',
           lineHeight: 1.55,
-          color: '#94a3b8'
+          color: 'var(--text-muted)'
         }}
       >
         {data.body}

@@ -1,8 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
-:root {
+:root, :root[data-theme='dark'] {
+  --bg-body: #050608;
   --bg-dark: #0b0d13;
   --bg-card: #131722;
+  --bg-card-subtle: #1a1f2c;
   --bg-card-hover: #1b202e;
   --border-subtle: rgba(255, 255, 255, 0.08);
   --border-strong: rgba(255, 255, 255, 0.16);
@@ -18,12 +20,74 @@
   --text-muted: #94a3b8;
   --text-dim: #64748b;
 
+  --chip-bg: rgba(255, 255, 255, 0.04);
+  --chip-bg-hover: rgba(255, 255, 255, 0.08);
+  --input-bg: rgba(19, 23, 34, 0.9);
+
+  --code-bg: #090b10;
+  --code-text: #e2e8f0;
+
   --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 
-  --glass-bg: rgba(19, 23, 34, 0.75);
+  --glass-bg: rgba(19, 23, 34, 0.85);
   --glass-border: rgba(255, 255, 255, 0.1);
   --glass-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+
+  --badge-indigo-bg: rgba(99, 102, 241, 0.15);
+  --badge-indigo-border: rgba(99, 102, 241, 0.3);
+  --badge-indigo-text: #818cf8;
+
+  --badge-emerald-bg: rgba(16, 185, 129, 0.12);
+  --badge-emerald-border: rgba(16, 185, 129, 0.3);
+  --badge-emerald-text: #34d399;
+
+  --modal-overlay: rgba(11, 13, 19, 0.92);
+}
+
+:root[data-theme='light'] {
+  --bg-body: #e2e8f0;
+  --bg-dark: #ffffff;
+  --bg-card: #f8fafc;
+  --bg-card-subtle: #f1f5f9;
+  --bg-card-hover: #e2e8f0;
+  --border-subtle: rgba(15, 23, 42, 0.08);
+  --border-strong: rgba(15, 23, 42, 0.14);
+
+  --accent-primary: #4f46e5;
+  --accent-primary-hover: #4338ca;
+  --accent-cyan: #0891b2;
+  --accent-emerald: #059669;
+  --accent-amber: #d97706;
+  --accent-rose: #e11d48;
+
+  --text-main: #0f172a;
+  --text-muted: #475569;
+  --text-dim: #64748b;
+
+  --chip-bg: #f1f5f9;
+  --chip-bg-hover: #e2e8f0;
+  --input-bg: #ffffff;
+
+  --code-bg: #1e293b;
+  --code-text: #f8fafc;
+
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --glass-bg: rgba(255, 255, 255, 0.92);
+  --glass-border: rgba(15, 23, 42, 0.08);
+  --glass-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
+
+  --badge-indigo-bg: #e0e7ff;
+  --badge-indigo-border: #c7d2fe;
+  --badge-indigo-text: #4338ca;
+
+  --badge-emerald-bg: #d1fae5;
+  --badge-emerald-border: #a7f3d0;
+  --badge-emerald-text: #047857;
+
+  --modal-overlay: rgba(255, 255, 255, 0.94);
 }
 
 * {
@@ -37,13 +101,14 @@
 html, body, #root {
   width: 100%;
   height: 100%;
-  background-color: #050608;
+  background-color: var(--bg-body);
   color: var(--text-main);
   font-family: var(--font-sans);
   overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Mobile Frame Wrapper for Desktop, Full Screen for Mobile */
@@ -57,7 +122,8 @@ html, body, #root {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 25px 60px -10px rgba(0, 0, 0, 0.8), 0 0 0 1px var(--border-strong);
+  box-shadow: 0 25px 60px -10px rgba(0, 0, 0, 0.3), 0 0 0 1px var(--border-strong);
+  transition: background 0.3s ease, box-shadow 0.3s ease;
 }
 
 @media (min-width: 480px) {
@@ -75,7 +141,7 @@ html, body, #root {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(148, 163, 184, 0.3);
   border-radius: 4px;
 }
 
@@ -87,6 +153,7 @@ html, body, #root {
   padding: 24px;
   backdrop-filter: blur(16px);
   box-shadow: var(--glass-shadow);
+  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .scrollable-card {
@@ -110,7 +177,7 @@ html, body, #root {
   padding: 14px 20px;
   border-radius: 16px;
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: -0.01em;
   border: 1px solid transparent;
   cursor: pointer;
@@ -119,25 +186,28 @@ html, body, #root {
 }
 
 .tactile-btn-primary {
-  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-primary-hover) 100%);
   color: #ffffff;
-  box-shadow: 0 8px 24px -4px rgba(99, 102, 241, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 20px -4px rgba(79, 70, 229, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .tactile-btn-primary:active {
-  transform: scale(0.97);
-  box-shadow: 0 4px 12px -2px rgba(99, 102, 241, 0.4);
+  transform: translateY(2px) scale(0.98);
+  box-shadow: 0 4px 10px -2px rgba(79, 70, 229, 0.3);
 }
 
 .tactile-btn-secondary {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--chip-bg);
   color: var(--text-main);
   border: 1px solid var(--border-subtle);
 }
 
+.tactile-btn-secondary:hover {
+  background: var(--chip-bg-hover);
+}
+
 .tactile-btn-secondary:active {
-  background: rgba(255, 255, 255, 0.1);
-  transform: scale(0.97);
+  transform: translateY(2px) scale(0.98);
 }
 
 /* Code Badge & Snippet Styling */
@@ -146,26 +216,26 @@ html, body, #root {
 }
 
 .code-block {
-  background: #090b10;
+  background: var(--code-bg);
   border: 1px solid var(--border-subtle);
   border-radius: 12px;
   padding: 14px;
   font-family: var(--font-mono);
   font-size: 13px;
   line-height: 1.6;
-  color: #e2e8f0;
+  color: var(--code-text);
   overflow-x: auto;
 }
 
 /* Glow effects */
 .glow-primary {
-  box-shadow: 0 0 30px rgba(99, 102, 241, 0.25);
+  box-shadow: 0 0 25px rgba(99, 102, 241, 0.25);
 }
 
 .glow-emerald {
-  box-shadow: 0 0 30px rgba(16, 185, 129, 0.25);
+  box-shadow: 0 0 25px rgba(16, 185, 129, 0.25);
 }
 
 .glow-rose {
-  box-shadow: 0 0 30px rgba(244, 63, 94, 0.25);
+  box-shadow: 0 0 25px rgba(244, 63, 94, 0.25);
 }

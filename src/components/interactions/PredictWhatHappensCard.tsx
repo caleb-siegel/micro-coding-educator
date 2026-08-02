@@ -39,21 +39,21 @@ export const PredictWhatHappensCard: React.FC<Props> = ({ data }) => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', gap: '16px' }}>
       <div>
-        <div style={{ fontSize: '12px', fontWeight: 700, color: '#818cf8', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px' }}>
+        <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--accent-primary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px' }}>
           Interactive Simulation
         </div>
-        <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#f8fafc', lineHeight: 1.4 }}>
+        <h3 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-main)', lineHeight: 1.4 }}>
           {data.scenario}
         </h3>
       </div>
 
       {/* Interactive Control */}
-      <div style={{ padding: '16px', borderRadius: '16px', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.08)', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+      <div style={{ padding: '16px', borderRadius: '16px', background: 'var(--chip-bg)', border: '1px solid var(--border-subtle)', display: 'flex', flexDirection: 'column', gap: '12px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <span style={{ fontSize: '13px', fontWeight: 600, color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '6px' }}>
             <Sliders size={16} /> {data.metricLabel}
           </span>
-          <span style={{ fontSize: '18px', fontWeight: 800, color: '#818cf8', fontFamily: 'var(--font-mono)' }}>
+          <span style={{ fontSize: '18px', fontWeight: 800, color: 'var(--accent-primary)', fontFamily: 'var(--font-mono)' }}>
             {val} {data.unit}
           </span>
         </div>
@@ -66,7 +66,7 @@ export const PredictWhatHappensCard: React.FC<Props> = ({ data }) => {
           value={val}
           onChange={handleSliderChange}
           disabled={isRevealed}
-          style={{ width: '100%', accentColor: '#6366f1', cursor: 'pointer' }}
+          style={{ width: '100%', accentColor: 'var(--accent-primary)', cursor: 'pointer' }}
         />
 
         {/* Dynamic Status Badge */}
@@ -76,13 +76,13 @@ export const PredictWhatHappensCard: React.FC<Props> = ({ data }) => {
             borderRadius: '12px',
             background:
               currentOutcome.status === 'success'
-                ? 'rgba(16, 185, 129, 0.15)'
+                ? 'var(--badge-emerald-bg)'
                 : currentOutcome.status === 'warning'
                 ? 'rgba(245, 158, 11, 0.15)'
                 : 'rgba(244, 63, 94, 0.15)',
             border: `1px solid ${
               currentOutcome.status === 'success'
-                ? 'rgba(16, 185, 129, 0.4)'
+                ? 'var(--badge-emerald-border)'
                 : currentOutcome.status === 'warning'
                 ? 'rgba(245, 158, 11, 0.4)'
                 : 'rgba(244, 63, 94, 0.4)'
@@ -92,14 +92,14 @@ export const PredictWhatHappensCard: React.FC<Props> = ({ data }) => {
             gap: '10px'
           }}
         >
-          {currentOutcome.status === 'success' && <CheckCircle size={18} color="#34d399" />}
-          {currentOutcome.status === 'warning' && <AlertTriangle size={18} color="#fbbf24" />}
-          {currentOutcome.status === 'critical' && <AlertCircle size={18} color="#fb7185" />}
+          {currentOutcome.status === 'success' && <CheckCircle size={18} color="var(--accent-emerald)" />}
+          {currentOutcome.status === 'warning' && <AlertTriangle size={18} color="var(--accent-amber)" />}
+          {currentOutcome.status === 'critical' && <AlertCircle size={18} color="var(--accent-rose)" />}
           <div>
-            <div style={{ fontSize: '13px', fontWeight: 700, color: '#f8fafc' }}>
+            <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-main)' }}>
               {currentOutcome.title}
             </div>
-            <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '2px' }}>
+            <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '2px' }}>
               {currentOutcome.description}
             </div>
           </div>
@@ -124,14 +124,14 @@ export const PredictWhatHappensCard: React.FC<Props> = ({ data }) => {
               marginTop: 'auto',
               padding: '14px',
               borderRadius: '14px',
-              background: 'rgba(99, 102, 241, 0.12)',
-              border: '1px solid rgba(99, 102, 241, 0.3)'
+              background: 'var(--badge-indigo-bg)',
+              border: '1px solid var(--badge-indigo-border)'
             }}
           >
-            <div style={{ fontSize: '13px', fontWeight: 700, color: '#818cf8', marginBottom: '4px' }}>
+            <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--accent-primary)', marginBottom: '4px' }}>
               💡 System Insight:
             </div>
-            <div style={{ fontSize: '13px', lineHeight: 1.5, color: '#cbd5e1' }}>
+            <div style={{ fontSize: '13px', lineHeight: 1.5, color: 'var(--text-main)' }}>
               {data.explanation}
             </div>
           </motion.div>

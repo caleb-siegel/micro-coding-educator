@@ -26,10 +26,10 @@ export const ChooseTheTradeoffCard: React.FC<Props> = ({ data }) => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', gap: '16px' }}>
       <div>
-        <div style={{ fontSize: '12px', fontWeight: 700, color: '#818cf8', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px' }}>
+        <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--accent-primary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px' }}>
           Architectural Tradeoff
         </div>
-        <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#f8fafc', lineHeight: 1.4 }}>
+        <h3 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-main)', lineHeight: 1.4 }}>
           {data.scenario}
         </h3>
       </div>
@@ -42,8 +42,8 @@ export const ChooseTheTradeoffCard: React.FC<Props> = ({ data }) => {
           let cardStyle: React.CSSProperties = {
             padding: '12px 14px',
             borderRadius: '14px',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
-            background: 'rgba(255, 255, 255, 0.03)',
+            border: '1px solid var(--border-subtle)',
+            background: 'var(--chip-bg)',
             cursor: isAnswered ? 'default' : 'pointer',
             display: 'flex',
             flexDirection: 'column',
@@ -52,8 +52,8 @@ export const ChooseTheTradeoffCard: React.FC<Props> = ({ data }) => {
 
           if (isAnswered) {
             if (opt.isBestChoice) {
-              cardStyle.background = 'rgba(16, 185, 129, 0.15)';
-              cardStyle.borderColor = 'rgba(16, 185, 129, 0.4)';
+              cardStyle.background = 'var(--badge-emerald-bg)';
+              cardStyle.borderColor = 'var(--badge-emerald-border)';
             } else if (isSelected && !opt.isBestChoice) {
               cardStyle.background = 'rgba(244, 63, 94, 0.15)';
               cardStyle.borderColor = 'rgba(244, 63, 94, 0.4)';
@@ -70,22 +70,22 @@ export const ChooseTheTradeoffCard: React.FC<Props> = ({ data }) => {
               style={cardStyle}
             >
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <span style={{ fontSize: '14px', fontWeight: 700, color: '#f8fafc' }}>
+                <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-main)' }}>
                   {opt.title}
                 </span>
                 {isAnswered && opt.isBestChoice && (
-                  <CheckCircle2 size={18} color="#34d399" />
+                  <CheckCircle2 size={18} color="var(--accent-emerald)" />
                 )}
               </div>
 
               <div style={{ display: 'flex', gap: '12px', fontSize: '12px' }}>
                 {opt.pros.length > 0 && (
-                  <div style={{ color: '#34d399', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <div style={{ color: 'var(--accent-emerald)', display: 'flex', alignItems: 'center', gap: '4px' }}>
                     <ThumbsUp size={12} /> {opt.pros[0]}
                   </div>
                 )}
                 {opt.cons.length > 0 && (
-                  <div style={{ color: '#fb7185', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <div style={{ color: 'var(--accent-rose)', display: 'flex', alignItems: 'center', gap: '4px' }}>
                     <ThumbsDown size={12} /> {opt.cons[0]}
                   </div>
                 )}
@@ -104,14 +104,14 @@ export const ChooseTheTradeoffCard: React.FC<Props> = ({ data }) => {
               marginTop: 'auto',
               padding: '14px',
               borderRadius: '14px',
-              background: selectedOption.isBestChoice ? 'rgba(16, 185, 129, 0.12)' : 'rgba(99, 102, 241, 0.12)',
-              border: `1px solid ${selectedOption.isBestChoice ? 'rgba(16, 185, 129, 0.3)' : 'rgba(99, 102, 241, 0.3)'}`
+              background: selectedOption.isBestChoice ? 'var(--badge-emerald-bg)' : 'var(--badge-indigo-bg)',
+              border: `1px solid ${selectedOption.isBestChoice ? 'var(--badge-emerald-border)' : 'var(--badge-indigo-border)'}`
             }}
           >
-            <div style={{ fontSize: '13px', fontWeight: 700, color: selectedOption.isBestChoice ? '#34d399' : '#818cf8', marginBottom: '4px' }}>
+            <div style={{ fontSize: '13px', fontWeight: 700, color: selectedOption.isBestChoice ? 'var(--accent-emerald)' : 'var(--accent-primary)', marginBottom: '4px' }}>
               {selectedOption.isBestChoice ? '🎯 Optimal Architecture Choice!' : '💡 Tradeoff Analysis:'}
             </div>
-            <div style={{ fontSize: '13px', lineHeight: 1.5, color: '#cbd5e1' }}>
+            <div style={{ fontSize: '13px', lineHeight: 1.5, color: 'var(--text-main)' }}>
               {selectedOption.why}
             </div>
           </motion.div>

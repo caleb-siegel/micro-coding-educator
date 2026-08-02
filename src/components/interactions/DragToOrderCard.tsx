@@ -40,10 +40,10 @@ export const DragToOrderCard: React.FC<Props> = ({ data }) => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', gap: '16px' }}>
       <div>
-        <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#f8fafc', marginBottom: '6px' }}>
+        <h3 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--text-main)', marginBottom: '6px' }}>
           {data.instruction}
         </h3>
-        <p style={{ fontSize: '13px', color: '#94a3b8' }}>Tap arrows or drag to arrange in correct execution order:</p>
+        <p style={{ fontSize: '13px', color: 'var(--text-muted)' }}>Tap arrows or drag to arrange in correct execution order:</p>
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -51,8 +51,8 @@ export const DragToOrderCard: React.FC<Props> = ({ data }) => {
           let itemStyle: React.CSSProperties = {
             padding: '12px 14px',
             borderRadius: '14px',
-            background: 'rgba(255, 255, 255, 0.04)',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
+            background: 'var(--chip-bg)',
+            border: '1px solid var(--border-subtle)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
@@ -62,11 +62,11 @@ export const DragToOrderCard: React.FC<Props> = ({ data }) => {
           if (isSubmitted) {
             const isItemCorrect = item.correctIndex === idx;
             if (isItemCorrect) {
-              itemStyle.background = 'rgba(16, 185, 129, 0.12)';
-              itemStyle.borderColor = 'rgba(16, 185, 129, 0.3)';
+              itemStyle.background = 'var(--badge-emerald-bg)';
+              itemStyle.borderColor = 'var(--badge-emerald-border)';
             } else {
-              itemStyle.background = 'rgba(244, 63, 94, 0.12)';
-              itemStyle.borderColor = 'rgba(244, 63, 94, 0.3)';
+              itemStyle.background = 'rgba(244, 63, 94, 0.15)';
+              itemStyle.borderColor = 'rgba(244, 63, 94, 0.4)';
             }
           }
 
@@ -78,8 +78,8 @@ export const DragToOrderCard: React.FC<Props> = ({ data }) => {
               style={itemStyle}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <GripVertical size={18} color="#64748b" />
-                <span style={{ fontSize: '14px', fontWeight: 600, color: '#e2e8f0' }}>
+                <GripVertical size={18} color="var(--text-dim)" />
+                <span style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text-main)' }}>
                   {item.label}
                 </span>
               </div>
@@ -90,11 +90,11 @@ export const DragToOrderCard: React.FC<Props> = ({ data }) => {
                     onClick={() => moveItem(idx, 'up')}
                     disabled={idx === 0}
                     style={{
-                      background: 'rgba(255, 255, 255, 0.08)',
+                      background: 'var(--chip-bg-hover)',
                       border: 'none',
                       borderRadius: '8px',
                       padding: '4px',
-                      color: '#cbd5e1',
+                      color: 'var(--text-main)',
                       cursor: idx === 0 ? 'not-allowed' : 'pointer',
                       opacity: idx === 0 ? 0.3 : 1
                     }}
@@ -105,11 +105,11 @@ export const DragToOrderCard: React.FC<Props> = ({ data }) => {
                     onClick={() => moveItem(idx, 'down')}
                     disabled={idx === items.length - 1}
                     style={{
-                      background: 'rgba(255, 255, 255, 0.08)',
+                      background: 'var(--chip-bg-hover)',
                       border: 'none',
                       borderRadius: '8px',
                       padding: '4px',
-                      color: '#cbd5e1',
+                      color: 'var(--text-main)',
                       cursor: idx === items.length - 1 ? 'not-allowed' : 'pointer',
                       opacity: idx === items.length - 1 ? 0.3 : 1
                     }}
@@ -118,7 +118,7 @@ export const DragToOrderCard: React.FC<Props> = ({ data }) => {
                   </button>
                 </div>
               ) : (
-                item.correctIndex === idx && <CheckCircle2 size={18} color="#34d399" />
+                item.correctIndex === idx && <CheckCircle2 size={18} color="var(--accent-emerald)" />
               )}
             </motion.div>
           );
@@ -143,14 +143,14 @@ export const DragToOrderCard: React.FC<Props> = ({ data }) => {
               marginTop: 'auto',
               padding: '14px',
               borderRadius: '14px',
-              background: isCorrect ? 'rgba(16, 185, 129, 0.12)' : 'rgba(99, 102, 241, 0.12)',
-              border: `1px solid ${isCorrect ? 'rgba(16, 185, 129, 0.3)' : 'rgba(99, 102, 241, 0.3)'}`
+              background: isCorrect ? 'var(--badge-emerald-bg)' : 'var(--badge-indigo-bg)',
+              border: `1px solid ${isCorrect ? 'var(--badge-emerald-border)' : 'var(--badge-indigo-border)'}`
             }}
           >
-            <div style={{ fontSize: '13px', fontWeight: 700, color: isCorrect ? '#34d399' : '#818cf8', marginBottom: '4px' }}>
+            <div style={{ fontSize: '13px', fontWeight: 700, color: isCorrect ? 'var(--accent-emerald)' : 'var(--accent-primary)', marginBottom: '4px' }}>
               {isCorrect ? '✨ Perfect Sequence!' : '💡 Intended Sequence:'}
             </div>
-            <div style={{ fontSize: '13px', lineHeight: 1.5, color: '#cbd5e1' }}>
+            <div style={{ fontSize: '13px', lineHeight: 1.5, color: 'var(--text-main)' }}>
               {data.explanation}
             </div>
           </motion.div>

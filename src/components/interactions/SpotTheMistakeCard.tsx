@@ -40,10 +40,10 @@ export const SpotTheMistakeCard: React.FC<Props> = ({ data }) => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', gap: '16px' }}>
       <div>
-        <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#f8fafc', marginBottom: '4px' }}>
+        <h3 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--text-main)', marginBottom: '4px' }}>
           {data.instruction}
         </h3>
-        <p style={{ fontSize: '13px', color: '#94a3b8' }}>
+        <p style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
           {isCodeMode ? 'Tap the line containing the flaw:' : 'Tap the bottleneck/flawed component below:'}
         </p>
       </div>
@@ -56,8 +56,8 @@ export const SpotTheMistakeCard: React.FC<Props> = ({ data }) => {
             let cardStyle: React.CSSProperties = {
               padding: '14px',
               borderRadius: '16px',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              background: 'rgba(255, 255, 255, 0.04)',
+              border: '1px solid var(--border-subtle)',
+              background: 'var(--chip-bg)',
               cursor: revealed ? 'default' : 'pointer',
               display: 'flex',
               alignItems: 'center',
@@ -70,7 +70,7 @@ export const SpotTheMistakeCard: React.FC<Props> = ({ data }) => {
                 cardStyle.background = 'rgba(244, 63, 94, 0.18)';
                 cardStyle.borderColor = 'rgba(244, 63, 94, 0.5)';
               } else if (isSelected && !node.isMistake) {
-                cardStyle.background = 'rgba(255, 255, 255, 0.08)';
+                cardStyle.background = 'var(--chip-bg-hover)';
               } else {
                 cardStyle.opacity = 0.5;
               }
@@ -84,18 +84,18 @@ export const SpotTheMistakeCard: React.FC<Props> = ({ data }) => {
                 style={cardStyle}
               >
                 <div>
-                  <div style={{ fontSize: '15px', fontWeight: 700, color: '#f8fafc' }}>
+                  <div style={{ fontSize: '15px', fontWeight: 700, color: 'var(--text-main)' }}>
                     {node.label}
                   </div>
                   {node.subtext && (
-                    <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '2px' }}>
+                    <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '2px' }}>
                       {node.subtext}
                     </div>
                   )}
                 </div>
 
                 {revealed && node.isMistake && (
-                  <ShieldAlert size={22} color="#fb7185" style={{ flexShrink: 0 }} />
+                  <ShieldAlert size={22} color="var(--accent-rose)" style={{ flexShrink: 0 }} />
                 )}
               </motion.div>
             );
@@ -130,8 +130,8 @@ export const SpotTheMistakeCard: React.FC<Props> = ({ data }) => {
                 onClick={() => handleLineClick(line.line, line.isMistake)}
                 style={lineStyle}
               >
-                <span style={{ color: '#64748b', width: '20px', fontSize: '12px' }}>{line.line}</span>
-                <span style={{ color: line.isMistake && revealed ? '#fb7185' : '#e2e8f0', fontWeight: line.isMistake && revealed ? 700 : 400 }}>
+                <span style={{ color: 'var(--text-dim)', width: '20px', fontSize: '12px' }}>{line.line}</span>
+                <span style={{ color: line.isMistake && revealed ? 'var(--accent-rose)' : 'var(--code-text)', fontWeight: line.isMistake && revealed ? 700 : 400 }}>
                   {line.text}
                 </span>
               </motion.div>
@@ -149,14 +149,14 @@ export const SpotTheMistakeCard: React.FC<Props> = ({ data }) => {
               marginTop: 'auto',
               padding: '14px',
               borderRadius: '14px',
-              background: 'rgba(244, 63, 94, 0.12)',
+              background: 'rgba(244, 63, 94, 0.15)',
               border: '1px solid rgba(244, 63, 94, 0.3)'
             }}
           >
-            <div style={{ fontSize: '13px', fontWeight: 700, color: '#fb7185', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--accent-rose)', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '6px' }}>
               <AlertTriangle size={16} /> Bottleneck Revealed!
             </div>
-            <div style={{ fontSize: '13px', lineHeight: 1.5, color: '#cbd5e1' }}>
+            <div style={{ fontSize: '13px', lineHeight: 1.5, color: 'var(--text-main)' }}>
               {data.explanation}
             </div>
           </motion.div>

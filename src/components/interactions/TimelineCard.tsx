@@ -40,10 +40,10 @@ export const TimelineCard: React.FC<Props> = ({ data }) => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', gap: '16px' }}>
       <div>
-        <div style={{ fontSize: '12px', fontWeight: 700, color: '#818cf8', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '2px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+        <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--accent-primary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '2px', display: 'flex', alignItems: 'center', gap: '4px' }}>
           <History size={14} /> Chronological Timeline
         </div>
-        <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#f8fafc' }}>
+        <h3 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-main)' }}>
           {data.instruction}
         </h3>
       </div>
@@ -53,8 +53,8 @@ export const TimelineCard: React.FC<Props> = ({ data }) => {
           let cardStyle: React.CSSProperties = {
             padding: '12px 14px',
             borderRadius: '14px',
-            background: 'rgba(255, 255, 255, 0.04)',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
+            background: 'var(--chip-bg)',
+            border: '1px solid var(--border-subtle)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
@@ -63,8 +63,8 @@ export const TimelineCard: React.FC<Props> = ({ data }) => {
 
           if (isSubmitted) {
             const isItemCorrect = evt.correctOrder === idx + 1;
-            cardStyle.borderColor = isItemCorrect ? 'rgba(16, 185, 129, 0.4)' : 'rgba(244, 63, 94, 0.4)';
-            cardStyle.background = isItemCorrect ? 'rgba(16, 185, 129, 0.12)' : 'rgba(244, 63, 94, 0.12)';
+            cardStyle.borderColor = isItemCorrect ? 'var(--badge-emerald-border)' : 'rgba(244, 63, 94, 0.4)';
+            cardStyle.background = isItemCorrect ? 'var(--badge-emerald-bg)' : 'rgba(244, 63, 94, 0.12)';
           }
 
           return (
@@ -75,9 +75,9 @@ export const TimelineCard: React.FC<Props> = ({ data }) => {
                     width: '24px',
                     height: '24px',
                     borderRadius: '50%',
-                    background: 'rgba(99, 102, 241, 0.2)',
-                    border: '1px solid rgba(99, 102, 241, 0.4)',
-                    color: '#818cf8',
+                    background: 'var(--badge-indigo-bg)',
+                    border: '1px solid var(--badge-indigo-border)',
+                    color: 'var(--badge-indigo-text)',
                     fontSize: '12px',
                     fontWeight: 800,
                     display: 'flex',
@@ -90,10 +90,10 @@ export const TimelineCard: React.FC<Props> = ({ data }) => {
                 </span>
 
                 <div>
-                  <div style={{ fontSize: '14px', fontWeight: 700, color: '#f8fafc' }}>
+                  <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-main)' }}>
                     {evt.title}
                   </div>
-                  <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '2px' }}>
+                  <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '2px' }}>
                     {evt.description}
                   </div>
                 </div>
@@ -105,11 +105,11 @@ export const TimelineCard: React.FC<Props> = ({ data }) => {
                     onClick={() => moveEvent(idx, 'up')}
                     disabled={idx === 0}
                     style={{
-                      background: 'rgba(255, 255, 255, 0.08)',
+                      background: 'var(--chip-bg-hover)',
                       border: 'none',
                       borderRadius: '8px',
                       padding: '4px',
-                      color: '#cbd5e1',
+                      color: 'var(--text-main)',
                       cursor: idx === 0 ? 'not-allowed' : 'pointer',
                       opacity: idx === 0 ? 0.3 : 1
                     }}
@@ -120,11 +120,11 @@ export const TimelineCard: React.FC<Props> = ({ data }) => {
                     onClick={() => moveEvent(idx, 'down')}
                     disabled={idx === events.length - 1}
                     style={{
-                      background: 'rgba(255, 255, 255, 0.08)',
+                      background: 'var(--chip-bg-hover)',
                       border: 'none',
                       borderRadius: '8px',
                       padding: '4px',
-                      color: '#cbd5e1',
+                      color: 'var(--text-main)',
                       cursor: idx === events.length - 1 ? 'not-allowed' : 'pointer',
                       opacity: idx === events.length - 1 ? 0.3 : 1
                     }}
@@ -133,7 +133,7 @@ export const TimelineCard: React.FC<Props> = ({ data }) => {
                   </button>
                 </div>
               ) : (
-                evt.correctOrder === idx + 1 && <CheckCircle2 size={18} color="#34d399" />
+                evt.correctOrder === idx + 1 && <CheckCircle2 size={18} color="var(--accent-emerald)" />
               )}
             </motion.div>
           );
@@ -158,14 +158,14 @@ export const TimelineCard: React.FC<Props> = ({ data }) => {
               marginTop: 'auto',
               padding: '14px',
               borderRadius: '14px',
-              background: isCorrect ? 'rgba(16, 185, 129, 0.12)' : 'rgba(99, 102, 241, 0.12)',
-              border: `1px solid ${isCorrect ? 'rgba(16, 185, 129, 0.3)' : 'rgba(99, 102, 241, 0.3)'}`
+              background: isCorrect ? 'var(--badge-emerald-bg)' : 'var(--badge-indigo-bg)',
+              border: `1px solid ${isCorrect ? 'var(--badge-emerald-border)' : 'var(--badge-indigo-border)'}`
             }}
           >
-            <div style={{ fontSize: '13px', fontWeight: 700, color: isCorrect ? '#34d399' : '#818cf8', marginBottom: '4px' }}>
+            <div style={{ fontSize: '13px', fontWeight: 700, color: isCorrect ? 'var(--accent-emerald)' : 'var(--accent-primary)', marginBottom: '4px' }}>
               {isCorrect ? '✨ Perfect Milestone Order!' : '💡 Historical Context:'}
             </div>
-            <div style={{ fontSize: '12px', lineHeight: 1.5, color: '#cbd5e1' }}>
+            <div style={{ fontSize: '12px', lineHeight: 1.5, color: 'var(--text-main)' }}>
               {data.explanation}
             </div>
           </motion.div>

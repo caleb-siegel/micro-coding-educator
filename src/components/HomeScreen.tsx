@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import type { Topic, Difficulty } from '../types/lesson';
 import { Zap, Clock, Sparkles, Target, Edit3 } from 'lucide-react';
 import { sounds } from '../utils/audio';
+import { ThemeToggle } from './ThemeToggle';
 
 interface Props {
   onStartSession: (topic: Topic, duration: number, difficulty: Difficulty) => void;
@@ -21,9 +22,9 @@ const TOPICS: { name: string; icon: string }[] = [
 ];
 
 const DIFFICULTIES: { name: Difficulty; label: string; badgeColor: string }[] = [
-  { name: 'Foundational', label: '🟢 Intro', badgeColor: '#34d399' },
-  { name: 'Intermediate', label: '🟡 Mid', badgeColor: '#fbbf24' },
-  { name: 'Staff Level', label: '🔴 Deep', badgeColor: '#fb7185' }
+  { name: 'Foundational', label: '🌱 Intro', badgeColor: 'var(--accent-emerald)' },
+  { name: 'Intermediate', label: '⚡ Mid', badgeColor: 'var(--accent-amber)' },
+  { name: 'Staff Level', label: '🔥 Deep', badgeColor: 'var(--accent-rose)' }
 ];
 
 const DURATIONS = [3, 5, 10];
@@ -84,32 +85,34 @@ export const HomeScreen: React.FC<Props> = ({ onStartSession }) => {
         overflowY: 'auto'
       }}
     >
-      {/* Header & Greeting */}
+      {/* Header & Greeting Bar */}
       <motion.div
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}
+        style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div
             style={{
-              padding: '3px 10px',
+              padding: '4px 12px',
               borderRadius: '20px',
-              background: 'rgba(99, 102, 241, 0.15)',
-              border: '1px solid rgba(99, 102, 241, 0.3)',
-              color: '#818cf8',
+              background: 'var(--badge-indigo-bg)',
+              border: '1px solid var(--badge-indigo-border)',
+              color: 'var(--badge-indigo-text)',
               fontSize: '11px',
               fontWeight: 800,
-              letterSpacing: '0.06em',
+              letterSpacing: '0.05em',
               textTransform: 'uppercase',
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '4px'
+              gap: '6px'
             }}
           >
-            <Sparkles size={12} /> NYT Games For Engineers
+            <Sparkles size={13} /> NYT Games For Engineers
           </div>
+
+          <ThemeToggle />
         </div>
 
         <h1
@@ -118,12 +121,13 @@ export const HomeScreen: React.FC<Props> = ({ onStartSession }) => {
             fontWeight: 800,
             lineHeight: 1.2,
             letterSpacing: '-0.02em',
-            color: '#f8fafc'
+            color: 'var(--text-main)',
+            marginTop: '4px'
           }}
         >
           {getGreeting()}.
         </h1>
-        <p style={{ fontSize: '14px', color: '#94a3b8', fontWeight: 500 }}>
+        <p style={{ fontSize: '14px', color: 'var(--text-muted)', fontWeight: 500 }}>
           Ready for a {selectedDuration}-minute {selectedDifficulty.toLowerCase()} challenge?
         </p>
       </motion.div>
@@ -136,7 +140,7 @@ export const HomeScreen: React.FC<Props> = ({ onStartSession }) => {
             style={{
               fontSize: '11px',
               fontWeight: 700,
-              color: '#64748b',
+              color: 'var(--text-dim)',
               textTransform: 'uppercase',
               letterSpacing: '0.08em'
             }}
@@ -154,27 +158,27 @@ export const HomeScreen: React.FC<Props> = ({ onStartSession }) => {
                   whileTap={{ scale: 0.97 }}
                   onClick={() => handleTopicSelect(t.name)}
                   style={{
-                    padding: '10px 12px',
-                    borderRadius: '14px',
+                    padding: '11px 13px',
+                    borderRadius: '16px',
                     border: isSelected
-                      ? '1.5px solid #818cf8'
-                      : '1px solid rgba(255, 255, 255, 0.08)',
+                      ? '2px solid var(--accent-primary)'
+                      : '1px solid var(--border-subtle)',
                     background: isSelected
-                      ? 'linear-gradient(135deg, rgba(99, 102, 241, 0.25), rgba(6, 182, 212, 0.15))'
-                      : 'rgba(255, 255, 255, 0.03)',
-                    color: isSelected ? '#ffffff' : '#cbd5e1',
+                      ? 'var(--badge-indigo-bg)'
+                      : 'var(--chip-bg)',
+                    color: isSelected ? 'var(--text-main)' : 'var(--text-muted)',
                     fontSize: '13px',
                     fontWeight: 700,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     cursor: 'pointer',
-                    boxShadow: isSelected ? '0 6px 16px -4px rgba(99, 102, 241, 0.3)' : 'none',
-                    transition: 'all 0.15s ease'
+                    boxShadow: isSelected ? '0 6px 16px -4px rgba(79, 70, 229, 0.25)' : 'none',
+                    transition: 'all 0.18s ease'
                   }}
                 >
-                  <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <span>{t.icon}</span>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{ fontSize: '15px' }}>{t.icon}</span>
                     <span>{t.name}</span>
                   </span>
                 </motion.button>
@@ -192,7 +196,7 @@ export const HomeScreen: React.FC<Props> = ({ onStartSession }) => {
                 style={{ marginTop: '6px' }}
               >
                 <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                  <Edit3 size={15} color="#818cf8" style={{ position: 'absolute', left: '12px' }} />
+                  <Edit3 size={15} color="var(--accent-primary)" style={{ position: 'absolute', left: '12px' }} />
                   <input
                     type="text"
                     placeholder="Type custom topic (e.g. GraphQL, Rust, WASM)..."
@@ -203,13 +207,13 @@ export const HomeScreen: React.FC<Props> = ({ onStartSession }) => {
                       width: '100%',
                       padding: '11px 14px 11px 36px',
                       borderRadius: '14px',
-                      border: '1.5px solid #818cf8',
-                      background: 'rgba(19, 23, 34, 0.9)',
-                      color: '#f8fafc',
+                      border: '1.5px solid var(--accent-primary)',
+                      background: 'var(--input-bg)',
+                      color: 'var(--text-main)',
                       fontSize: '13px',
                       fontWeight: 600,
                       outline: 'none',
-                      boxShadow: '0 0 20px rgba(99, 102, 241, 0.2)'
+                      boxShadow: '0 0 16px rgba(79, 70, 229, 0.15)'
                     }}
                   />
                 </div>
@@ -224,7 +228,7 @@ export const HomeScreen: React.FC<Props> = ({ onStartSession }) => {
             style={{
               fontSize: '11px',
               fontWeight: 700,
-              color: '#64748b',
+              color: 'var(--text-dim)',
               textTransform: 'uppercase',
               letterSpacing: '0.08em',
               display: 'flex',
@@ -248,14 +252,15 @@ export const HomeScreen: React.FC<Props> = ({ onStartSession }) => {
                     padding: '10px 8px',
                     borderRadius: '12px',
                     border: isSelected
-                      ? `1.5px solid ${diff.badgeColor}`
-                      : '1px solid rgba(255, 255, 255, 0.08)',
-                    background: isSelected ? `${diff.badgeColor}22` : 'rgba(255, 255, 255, 0.03)',
-                    color: isSelected ? diff.badgeColor : '#94a3b8',
+                      ? `2px solid ${diff.badgeColor}`
+                      : '1px solid var(--border-subtle)',
+                    background: isSelected ? 'var(--chip-bg-hover)' : 'var(--chip-bg)',
+                    color: isSelected ? diff.badgeColor : 'var(--text-muted)',
                     fontSize: '12px',
                     fontWeight: 700,
                     cursor: 'pointer',
-                    textAlign: 'center'
+                    textAlign: 'center',
+                    transition: 'all 0.15s ease'
                   }}
                 >
                   {diff.label}
@@ -271,7 +276,7 @@ export const HomeScreen: React.FC<Props> = ({ onStartSession }) => {
             style={{
               fontSize: '11px',
               fontWeight: 700,
-              color: '#64748b',
+              color: 'var(--text-dim)',
               textTransform: 'uppercase',
               letterSpacing: '0.08em',
               display: 'flex',
@@ -295,14 +300,15 @@ export const HomeScreen: React.FC<Props> = ({ onStartSession }) => {
                     padding: '10px',
                     borderRadius: '12px',
                     border: isSelected
-                      ? '1.5px solid #818cf8'
-                      : '1px solid rgba(255, 255, 255, 0.08)',
-                    background: isSelected ? 'rgba(99, 102, 241, 0.2)' : 'rgba(255, 255, 255, 0.03)',
-                    color: isSelected ? '#818cf8' : '#94a3b8',
+                      ? '2px solid var(--accent-primary)'
+                      : '1px solid var(--border-subtle)',
+                    background: isSelected ? 'var(--badge-indigo-bg)' : 'var(--chip-bg)',
+                    color: isSelected ? 'var(--badge-indigo-text)' : 'var(--text-muted)',
                     fontSize: '12px',
                     fontWeight: 700,
                     cursor: 'pointer',
-                    textAlign: 'center'
+                    textAlign: 'center',
+                    transition: 'all 0.15s ease'
                   }}
                 >
                   {dur} min

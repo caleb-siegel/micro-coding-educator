@@ -33,9 +33,9 @@ export const TakeawayCard: React.FC<Props> = ({ data, onNextTopicSelected, onRes
           style={{
             padding: '6px 12px',
             borderRadius: '20px',
-            background: 'rgba(16, 185, 129, 0.15)',
-            border: '1px solid rgba(16, 185, 129, 0.4)',
-            color: '#34d399',
+            background: 'var(--badge-emerald-bg)',
+            border: '1px solid var(--badge-emerald-border)',
+            color: 'var(--badge-emerald-text)',
             fontSize: '12px',
             fontWeight: 800,
             display: 'inline-flex',
@@ -57,11 +57,11 @@ export const TakeawayCard: React.FC<Props> = ({ data, onNextTopicSelected, onRes
             }
           }}
           style={{
-            background: 'rgba(255, 255, 255, 0.08)',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
+            background: 'var(--chip-bg)',
+            border: '1px solid var(--border-subtle)',
             borderRadius: '12px',
             padding: '8px 12px',
-            color: '#cbd5e1',
+            color: 'var(--text-main)',
             fontSize: '12px',
             fontWeight: 600,
             display: 'flex',
@@ -80,23 +80,23 @@ export const TakeawayCard: React.FC<Props> = ({ data, onNextTopicSelected, onRes
         style={{
           padding: '16px',
           borderRadius: '16px',
-          background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(16, 185, 129, 0.15))',
-          border: '1px solid rgba(99, 102, 241, 0.3)',
+          background: 'var(--badge-indigo-bg)',
+          border: '1px solid var(--badge-indigo-border)',
           display: 'flex',
           flexDirection: 'column',
           gap: '8px'
         }}
       >
-        <div style={{ fontSize: '11px', fontWeight: 800, color: '#818cf8', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '4px' }}>
+        <div style={{ fontSize: '11px', fontWeight: 800, color: 'var(--badge-indigo-text)', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '4px' }}>
           <Sparkles size={13} /> The 1-Sentence Takeaway
         </div>
-        <div style={{ fontSize: '15px', fontWeight: 700, lineHeight: 1.4, color: '#f8fafc' }}>
+        <div style={{ fontSize: '15px', fontWeight: 700, lineHeight: 1.4, color: 'var(--text-main)' }}>
           "{data.oneSentenceSummary}"
         </div>
       </motion.div>
 
       <div>
-        <div style={{ fontSize: '13px', fontWeight: 700, color: '#94a3b8', marginBottom: '8px' }}>
+        <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-muted)', marginBottom: '8px' }}>
           Key Insights Mastered:
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -109,17 +109,17 @@ export const TakeawayCard: React.FC<Props> = ({ data, onNextTopicSelected, onRes
               style={{
                 padding: '10px 12px',
                 borderRadius: '12px',
-                background: 'rgba(255, 255, 255, 0.03)',
-                border: '1px solid rgba(255, 255, 255, 0.08)',
+                background: 'var(--chip-bg)',
+                border: '1px solid var(--border-subtle)',
                 fontSize: '13px',
                 lineHeight: 1.4,
-                color: '#cbd5e1',
+                color: 'var(--text-main)',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '8px'
               }}
             >
-              <span style={{ color: '#34d399', fontWeight: 800 }}>✓</span>
+              <span style={{ color: 'var(--accent-emerald)', fontWeight: 800 }}>✓</span>
               <span>{insight}</span>
             </motion.div>
           ))}

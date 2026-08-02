@@ -46,34 +46,34 @@ export const GuessTheMetricCard: React.FC<Props> = ({ data }) => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', gap: '14px' }}>
       <div>
-        <div style={{ fontSize: '12px', fontWeight: 700, color: '#f59e0b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '2px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+        <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--accent-amber)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '2px', display: 'flex', alignItems: 'center', gap: '4px' }}>
           <TrendingUp size={14} /> Metric Anomaly
         </div>
-        <h3 style={{ fontSize: '15px', fontWeight: 700, color: '#f8fafc' }}>
+        <h3 style={{ fontSize: '15px', fontWeight: 700, color: 'var(--text-main)' }}>
           {data.metricTitle}
         </h3>
       </div>
 
       {/* SVG Metric Chart */}
-      <div style={{ background: '#090b10', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '16px', padding: '12px', position: 'relative' }}>
+      <div style={{ background: 'var(--code-bg)', border: '1px solid var(--border-subtle)', borderRadius: '16px', padding: '12px', position: 'relative' }}>
         <svg width="100%" viewBox={`0 0 ${svgWidth} ${svgHeight}`} style={{ overflow: 'visible' }}>
           {/* Gradient Fill under path */}
           <defs>
             <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#f43f5e" stopOpacity="0.3" />
-              <stop offset="100%" stopColor="#f43f5e" stopOpacity="0.0" />
+              <stop offset="0%" stopColor="var(--accent-rose)" stopOpacity="0.3" />
+              <stop offset="100%" stopColor="var(--accent-rose)" stopOpacity="0.0" />
             </linearGradient>
           </defs>
 
           <path d={`${pathD} L ${points[points.length - 1].x} ${svgHeight - padding} L ${points[0].x} ${svgHeight - padding} Z`} fill="url(#chartGrad)" />
-          <path d={pathD} fill="none" stroke="#f43f5e" strokeWidth="3" strokeLinecap="round" />
+          <path d={pathD} fill="none" stroke="var(--accent-rose)" strokeWidth="3" strokeLinecap="round" />
 
           {/* Points */}
           {points.map((pt, idx) => (
             <g key={idx}>
-              <circle cx={pt.x} cy={pt.y} r={pt.data.spike ? 6 : 3} fill={pt.data.spike ? '#fb7185' : '#818cf8'} />
+              <circle cx={pt.x} cy={pt.y} r={pt.data.spike ? 6 : 3} fill={pt.data.spike ? 'var(--accent-rose)' : 'var(--accent-primary)'} />
               {pt.data.spike && (
-                <circle cx={pt.x} cy={pt.y} r={10} fill="none" stroke="#fb7185" strokeWidth="1.5">
+                <circle cx={pt.x} cy={pt.y} r={10} fill="none" stroke="var(--accent-rose)" strokeWidth="1.5">
                   <animate attributeName="r" values="6;14;6" dur="2s" repeatCount="indefinite" />
                   <animate attributeName="opacity" values="1;0.2;1" dur="2s" repeatCount="indefinite" />
                 </circle>
@@ -82,14 +82,14 @@ export const GuessTheMetricCard: React.FC<Props> = ({ data }) => {
           ))}
         </svg>
 
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '4px', fontSize: '11px', color: '#64748b', fontFamily: 'var(--font-mono)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '4px', fontSize: '11px', color: 'var(--text-dim)', fontFamily: 'var(--font-mono)' }}>
           {data.chartData.map((d, i) => (
-            <span key={i} style={{ color: d.spike ? '#fb7185' : '#64748b', fontWeight: d.spike ? 700 : 400 }}>{d.time}</span>
+            <span key={i} style={{ color: d.spike ? 'var(--accent-rose)' : 'var(--text-dim)', fontWeight: d.spike ? 700 : 400 }}>{d.time}</span>
           ))}
         </div>
       </div>
 
-      <div style={{ fontSize: '14px', fontWeight: 600, color: '#e2e8f0' }}>
+      <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text-main)' }}>
         {data.question}
       </div>
 
@@ -101,8 +101,8 @@ export const GuessTheMetricCard: React.FC<Props> = ({ data }) => {
           let btnStyle: React.CSSProperties = {
             padding: '12px 14px',
             borderRadius: '12px',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
-            background: 'rgba(255, 255, 255, 0.04)',
+            border: '1px solid var(--border-subtle)',
+            background: 'var(--chip-bg)',
             cursor: isAnswered ? 'default' : 'pointer',
             display: 'flex',
             alignItems: 'center',
@@ -112,8 +112,8 @@ export const GuessTheMetricCard: React.FC<Props> = ({ data }) => {
 
           if (isAnswered) {
             if (c.isCorrect) {
-              btnStyle.background = 'rgba(16, 185, 129, 0.15)';
-              btnStyle.borderColor = 'rgba(16, 185, 129, 0.4)';
+              btnStyle.background = 'var(--badge-emerald-bg)';
+              btnStyle.borderColor = 'var(--badge-emerald-border)';
             } else if (isSelected && !c.isCorrect) {
               btnStyle.background = 'rgba(244, 63, 94, 0.15)';
               btnStyle.borderColor = 'rgba(244, 63, 94, 0.4)';
@@ -129,9 +129,9 @@ export const GuessTheMetricCard: React.FC<Props> = ({ data }) => {
               onClick={() => handleChoice(c.id, c.isCorrect)}
               style={btnStyle}
             >
-              <span style={{ fontSize: '13px', fontWeight: 500, color: '#e2e8f0' }}>{c.label}</span>
-              {isAnswered && c.isCorrect && <CheckCircle2 size={18} color="#34d399" />}
-              {isAnswered && isSelected && !c.isCorrect && <XCircle size={18} color="#fb7185" />}
+              <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-main)' }}>{c.label}</span>
+              {isAnswered && c.isCorrect && <CheckCircle2 size={18} color="var(--accent-emerald)" />}
+              {isAnswered && isSelected && !c.isCorrect && <XCircle size={18} color="var(--accent-rose)" />}
             </motion.div>
           );
         })}
@@ -146,14 +146,14 @@ export const GuessTheMetricCard: React.FC<Props> = ({ data }) => {
               marginTop: 'auto',
               padding: '12px',
               borderRadius: '14px',
-              background: selectedChoice.isCorrect ? 'rgba(16, 185, 129, 0.12)' : 'rgba(99, 102, 241, 0.12)',
-              border: `1px solid ${selectedChoice.isCorrect ? 'rgba(16, 185, 129, 0.3)' : 'rgba(99, 102, 241, 0.3)'}`
+              background: selectedChoice.isCorrect ? 'var(--badge-emerald-bg)' : 'var(--badge-indigo-bg)',
+              border: `1px solid ${selectedChoice.isCorrect ? 'var(--badge-emerald-border)' : 'var(--badge-indigo-border)'}`
             }}
           >
-            <div style={{ fontSize: '13px', fontWeight: 700, color: selectedChoice.isCorrect ? '#34d399' : '#818cf8', marginBottom: '4px' }}>
+            <div style={{ fontSize: '13px', fontWeight: 700, color: selectedChoice.isCorrect ? 'var(--accent-emerald)' : 'var(--accent-primary)', marginBottom: '4px' }}>
               {selectedChoice.isCorrect ? '🎯 Accurate Root Cause!' : '💡 Diagnostic Note:'}
             </div>
-            <div style={{ fontSize: '12px', lineHeight: 1.5, color: '#cbd5e1' }}>
+            <div style={{ fontSize: '12px', lineHeight: 1.5, color: 'var(--text-main)' }}>
               {selectedChoice.explanation}
             </div>
           </motion.div>

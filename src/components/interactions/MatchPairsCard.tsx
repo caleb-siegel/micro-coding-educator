@@ -48,10 +48,10 @@ export const MatchPairsCard: React.FC<Props> = ({ data }) => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', gap: '16px' }}>
       <div>
-        <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#f8fafc', marginBottom: '4px' }}>
+        <h3 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--text-main)', marginBottom: '4px' }}>
           {data.instruction}
         </h3>
-        <p style={{ fontSize: '13px', color: '#94a3b8' }}>Tap a Concept on the left, then tap its Definition on the right:</p>
+        <p style={{ fontSize: '13px', color: 'var(--text-muted)' }}>Tap a Concept on the left, then tap its Definition on the right:</p>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', flex: 1 }}>
@@ -70,16 +70,16 @@ export const MatchPairsCard: React.FC<Props> = ({ data }) => {
                   padding: '12px',
                   borderRadius: '12px',
                   border: isSelected
-                    ? '2px solid #818cf8'
+                    ? '2px solid var(--accent-primary)'
                     : isMatched
-                    ? '1px solid rgba(16, 185, 129, 0.4)'
-                    : '1px solid rgba(255, 255, 255, 0.1)',
+                    ? '1px solid var(--badge-emerald-border)'
+                    : '1px solid var(--border-subtle)',
                   background: isSelected
-                    ? 'rgba(99, 102, 241, 0.2)'
+                    ? 'var(--badge-indigo-bg)'
                     : isMatched
-                    ? 'rgba(16, 185, 129, 0.15)'
-                    : 'rgba(255, 255, 255, 0.04)',
-                  color: isMatched ? '#34d399' : '#f8fafc',
+                    ? 'var(--badge-emerald-bg)'
+                    : 'var(--chip-bg)',
+                  color: isMatched ? 'var(--accent-emerald)' : 'var(--text-main)',
                   fontSize: '13px',
                   fontWeight: 600,
                   textAlign: 'left',
@@ -91,7 +91,7 @@ export const MatchPairsCard: React.FC<Props> = ({ data }) => {
                 }}
               >
                 <span>{p.left}</span>
-                {isMatched && <Check size={16} color="#34d399" />}
+                {isMatched && <Check size={16} color="var(--accent-emerald)" />}
               </motion.button>
             );
           })}
@@ -112,16 +112,16 @@ export const MatchPairsCard: React.FC<Props> = ({ data }) => {
                   padding: '12px',
                   borderRadius: '12px',
                   border: isWrong
-                    ? '2px solid #fb7185'
+                    ? '2px solid var(--accent-rose)'
                     : isMatched
-                    ? '1px solid rgba(16, 185, 129, 0.4)'
-                    : '1px solid rgba(255, 255, 255, 0.1)',
+                    ? '1px solid var(--badge-emerald-border)'
+                    : '1px solid var(--border-subtle)',
                   background: isWrong
                     ? 'rgba(244, 63, 94, 0.2)'
                     : isMatched
-                    ? 'rgba(16, 185, 129, 0.15)'
-                    : 'rgba(255, 255, 255, 0.04)',
-                  color: isMatched ? '#34d399' : '#cbd5e1',
+                    ? 'var(--badge-emerald-bg)'
+                    : 'var(--chip-bg)',
+                  color: isMatched ? 'var(--accent-emerald)' : 'var(--text-muted)',
                   fontSize: '12px',
                   lineHeight: 1.4,
                   textAlign: 'left',
@@ -133,7 +133,7 @@ export const MatchPairsCard: React.FC<Props> = ({ data }) => {
                 }}
               >
                 <span>{p.right}</span>
-                {isMatched && <Check size={16} color="#34d399" />}
+                {isMatched && <Check size={16} color="var(--accent-emerald)" />}
               </motion.button>
             );
           })}
@@ -148,14 +148,14 @@ export const MatchPairsCard: React.FC<Props> = ({ data }) => {
             style={{
               padding: '14px',
               borderRadius: '14px',
-              background: 'rgba(16, 185, 129, 0.12)',
-              border: '1px solid rgba(16, 185, 129, 0.3)'
+              background: 'var(--badge-emerald-bg)',
+              border: '1px solid var(--badge-emerald-border)'
             }}
           >
-            <div style={{ fontSize: '13px', fontWeight: 700, color: '#34d399', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--accent-emerald)', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '6px' }}>
               <Zap size={16} /> All Concepts Matched!
             </div>
-            <div style={{ fontSize: '13px', lineHeight: 1.5, color: '#cbd5e1' }}>
+            <div style={{ fontSize: '13px', lineHeight: 1.5, color: 'var(--text-main)' }}>
               {data.explanation}
             </div>
           </motion.div>

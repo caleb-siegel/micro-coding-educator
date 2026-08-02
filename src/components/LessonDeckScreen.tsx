@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import type { Lesson, LessonCard, Topic } from '../types/lesson';
 import { X, Volume2, VolumeX, ArrowRight } from 'lucide-react';
 import { sounds } from '../utils/audio';
+import { ThemeToggle } from './ThemeToggle';
 
 // Interaction components
 import { HookCard } from './interactions/HookCard';
@@ -104,16 +105,17 @@ export const LessonDeckScreen: React.FC<Props> = ({ lesson, onExit, onSelectNext
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <button
             onClick={onExit}
+            aria-label="Exit lesson"
             style={{
-              background: 'rgba(255, 255, 255, 0.06)',
-              border: 'none',
+              background: 'var(--chip-bg)',
+              border: '1px solid var(--border-subtle)',
               borderRadius: '50%',
               width: '36px',
               height: '36px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: '#94a3b8',
+              color: 'var(--text-muted)',
               cursor: 'pointer'
             }}
           >
@@ -124,39 +126,44 @@ export const LessonDeckScreen: React.FC<Props> = ({ lesson, onExit, onSelectNext
             style={{
               fontSize: '12px',
               fontWeight: 800,
-              color: '#818cf8',
+              color: 'var(--badge-indigo-text)',
               textTransform: 'uppercase',
               letterSpacing: '0.05em',
-              background: 'rgba(99, 102, 241, 0.12)',
-              padding: '4px 12px',
-              borderRadius: '12px',
-              border: '1px solid rgba(99, 102, 241, 0.2)'
+              background: 'var(--badge-indigo-bg)',
+              padding: '5px 14px',
+              borderRadius: '14px',
+              border: '1px solid var(--badge-indigo-border)'
             }}
           >
             {lesson.topic}
           </div>
 
-          <button
-            onClick={toggleAudio}
-            style={{
-              background: 'rgba(255, 255, 255, 0.06)',
-              border: 'none',
-              borderRadius: '50%',
-              width: '36px',
-              height: '36px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: isMuted ? '#64748b' : '#34d399',
-              cursor: 'pointer'
-            }}
-          >
-            {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
-          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <ThemeToggle />
+
+            <button
+              onClick={toggleAudio}
+              aria-label="Toggle sound"
+              style={{
+                background: 'var(--chip-bg)',
+                border: '1px solid var(--border-subtle)',
+                borderRadius: '50%',
+                width: '36px',
+                height: '36px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: isMuted ? 'var(--text-dim)' : 'var(--accent-emerald)',
+                cursor: 'pointer'
+              }}
+            >
+              {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
+            </button>
+          </div>
         </div>
 
         {/* Multi-step Progress Bar */}
-        <div style={{ display: 'flex', gap: '4px', height: '4px' }}>
+        <div style={{ display: 'flex', gap: '4px', height: '5px' }}>
           {lesson.cards.map((_, idx) => (
             <div
               key={idx}
@@ -165,10 +172,10 @@ export const LessonDeckScreen: React.FC<Props> = ({ lesson, onExit, onSelectNext
                 borderRadius: '4px',
                 background:
                   idx === currentIndex
-                    ? '#6366f1'
+                    ? 'var(--accent-primary)'
                     : idx < currentIndex
-                    ? '#34d399'
-                    : 'rgba(255, 255, 255, 0.1)',
+                    ? 'var(--accent-emerald)'
+                    : 'var(--border-subtle)',
                 transition: 'background 0.3s ease'
               }}
             />

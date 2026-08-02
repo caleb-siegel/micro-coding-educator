@@ -44,7 +44,7 @@ export const MultipleChoiceCard: React.FC<Props> = ({ data, onAnswerSelected }) 
             fontSize: '17px',
             fontWeight: 700,
             lineHeight: 1.4,
-            color: '#f8fafc',
+            color: 'var(--text-main)',
             marginBottom: '4px'
           }}
         >
@@ -71,26 +71,26 @@ export const MultipleChoiceCard: React.FC<Props> = ({ data, onAnswerSelected }) 
             borderRadius: '14px',
             border: isFocused
               ? opt.isCorrect
-                ? '2px solid #34d399'
-                : '2px solid #818cf8'
-              : '1px solid rgba(255, 255, 255, 0.1)',
-            background: 'rgba(255, 255, 255, 0.03)',
+                ? '2px solid var(--accent-emerald)'
+                : '2px solid var(--accent-primary)'
+              : '1px solid var(--border-subtle)',
+            background: 'var(--chip-bg)',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
             gap: '12px',
             transition: 'all 0.2s ease',
-            boxShadow: isFocused ? '0 4px 16px rgba(99, 102, 241, 0.25)' : 'none'
+            boxShadow: isFocused ? '0 4px 16px rgba(79, 70, 229, 0.2)' : 'none'
           };
 
           if (isAnswered) {
             if (opt.isCorrect) {
-              optionStyle.background = 'rgba(16, 185, 129, 0.15)';
-              optionStyle.borderColor = isFocused ? '#34d399' : 'rgba(16, 185, 129, 0.4)';
+              optionStyle.background = 'var(--badge-emerald-bg)';
+              optionStyle.borderColor = isFocused ? 'var(--accent-emerald)' : 'var(--badge-emerald-border)';
             } else if (isFirstTapped && !opt.isCorrect) {
               optionStyle.background = 'rgba(244, 63, 94, 0.15)';
-              optionStyle.borderColor = isFocused ? '#fb7185' : 'rgba(244, 63, 94, 0.4)';
+              optionStyle.borderColor = isFocused ? 'var(--accent-rose)' : 'rgba(244, 63, 94, 0.4)';
             } else if (!isFocused) {
               optionStyle.opacity = 0.6;
             }
@@ -106,15 +106,15 @@ export const MultipleChoiceCard: React.FC<Props> = ({ data, onAnswerSelected }) 
               onClick={() => handleSelect(opt.id, opt.isCorrect)}
               style={optionStyle}
             >
-              <span style={{ fontSize: '13px', fontWeight: 500, lineHeight: 1.4, color: '#e2e8f0' }}>
+              <span style={{ fontSize: '13px', fontWeight: 600, lineHeight: 1.4, color: 'var(--text-main)' }}>
                 {opt.text}
               </span>
 
               {isAnswered && opt.isCorrect && (
-                <CheckCircle2 size={18} color="#34d399" style={{ flexShrink: 0 }} />
+                <CheckCircle2 size={18} color="var(--accent-emerald)" style={{ flexShrink: 0 }} />
               )}
               {isAnswered && isFirstTapped && !opt.isCorrect && (
-                <XCircle size={18} color="#fb7185" style={{ flexShrink: 0 }} />
+                <XCircle size={18} color="var(--accent-rose)" style={{ flexShrink: 0 }} />
               )}
             </motion.div>
           );
@@ -132,21 +132,21 @@ export const MultipleChoiceCard: React.FC<Props> = ({ data, onAnswerSelected }) 
               marginTop: 'auto',
               padding: '12px 14px',
               borderRadius: '14px',
-              background: activeOption.isCorrect ? 'rgba(16, 185, 129, 0.12)' : 'rgba(99, 102, 241, 0.12)',
-              border: `1px solid ${activeOption.isCorrect ? 'rgba(16, 185, 129, 0.3)' : 'rgba(99, 102, 241, 0.3)'}`
+              background: activeOption.isCorrect ? 'var(--badge-emerald-bg)' : 'var(--badge-indigo-bg)',
+              border: `1px solid ${activeOption.isCorrect ? 'var(--badge-emerald-border)' : 'var(--badge-indigo-border)'}`
             }}
           >
             <div
               style={{
                 fontSize: '12px',
                 fontWeight: 700,
-                color: activeOption.isCorrect ? '#34d399' : '#818cf8',
+                color: activeOption.isCorrect ? 'var(--accent-emerald)' : 'var(--accent-primary)',
                 marginBottom: '4px'
               }}
             >
               {activeOption.isCorrect ? '⚡ Why This Is Correct:' : '💡 Option Explanation:'}
             </div>
-            <div style={{ fontSize: '12.5px', lineHeight: 1.45, color: '#cbd5e1' }}>
+            <div style={{ fontSize: '12.5px', lineHeight: 1.45, color: 'var(--text-main)' }}>
               {activeOption.explanation}
             </div>
           </motion.div>

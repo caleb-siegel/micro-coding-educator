@@ -28,7 +28,7 @@ export const CardLearningSupport: React.FC<Props> = ({ hint, simpleExplanation, 
             style={{
               background: 'none',
               border: 'none',
-              color: '#818cf8',
+              color: 'var(--accent-primary)',
               fontSize: '12px',
               fontWeight: 600,
               display: 'inline-flex',
@@ -51,11 +51,11 @@ export const CardLearningSupport: React.FC<Props> = ({ hint, simpleExplanation, 
                 style={{
                   padding: '10px 12px',
                   borderRadius: '10px',
-                  background: 'rgba(99, 102, 241, 0.12)',
-                  border: '1px solid rgba(99, 102, 241, 0.25)',
+                  background: 'var(--badge-indigo-bg)',
+                  border: '1px solid var(--badge-indigo-border)',
                   fontSize: '12px',
                   lineHeight: 1.4,
-                  color: '#cbd5e1',
+                  color: 'var(--text-main)',
                   marginTop: '4px'
                 }}
               >
@@ -75,10 +75,10 @@ export const CardLearningSupport: React.FC<Props> = ({ hint, simpleExplanation, 
               setShowEli5(!showEli5);
             }}
             style={{
-              background: 'rgba(255, 255, 255, 0.05)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
+              background: 'var(--chip-bg)',
+              border: '1px solid var(--border-subtle)',
               borderRadius: '8px',
-              color: '#38bdf8',
+              color: 'var(--accent-cyan)',
               fontSize: '12px',
               fontWeight: 600,
               display: 'inline-flex',
@@ -101,15 +101,15 @@ export const CardLearningSupport: React.FC<Props> = ({ hint, simpleExplanation, 
                 style={{
                   padding: '12px',
                   borderRadius: '12px',
-                  background: 'rgba(56, 189, 248, 0.12)',
-                  border: '1px solid rgba(56, 189, 248, 0.3)',
+                  background: 'var(--badge-indigo-bg)',
+                  border: '1px solid var(--badge-indigo-border)',
                   fontSize: '12px',
                   lineHeight: 1.5,
-                  color: '#e0f2fe',
+                  color: 'var(--text-main)',
                   marginTop: '6px'
                 }}
               >
-                <div style={{ fontWeight: 700, color: '#38bdf8', marginBottom: '2px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <div style={{ fontWeight: 700, color: 'var(--accent-primary)', marginBottom: '2px', display: 'flex', alignItems: 'center', gap: '4px' }}>
                   <HelpCircle size={14} /> Simplified Concept:
                 </div>
                 {simpleExplanation}

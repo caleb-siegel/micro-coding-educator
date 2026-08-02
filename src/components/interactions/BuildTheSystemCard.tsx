@@ -55,10 +55,10 @@ export const BuildTheSystemCard: React.FC<Props> = ({ data }) => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', gap: '16px' }}>
       <div>
-        <h3 style={{ fontSize: '17px', fontWeight: 700, color: '#f8fafc', marginBottom: '4px' }}>
+        <h3 style={{ fontSize: '17px', fontWeight: 700, color: 'var(--text-main)', marginBottom: '4px' }}>
           {data.task}
         </h3>
-        <p style={{ fontSize: '12px', color: '#94a3b8' }}>Tap a block below, then tap the matching system slot:</p>
+        <p style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Tap a block below, then tap the matching system slot:</p>
       </div>
 
       {/* Target Slots Canvas */}
@@ -72,9 +72,9 @@ export const BuildTheSystemCard: React.FC<Props> = ({ data }) => {
             padding: '10px 14px',
             borderRadius: '12px',
             border: selectedBlockId
-              ? '2px dashed #818cf8'
-              : '1px dashed rgba(255, 255, 255, 0.2)',
-            background: assignedBlock ? 'rgba(99, 102, 241, 0.15)' : 'rgba(255, 255, 255, 0.02)',
+              ? '2px dashed var(--accent-primary)'
+              : '1px dashed var(--border-strong)',
+            background: assignedBlock ? 'var(--badge-indigo-bg)' : 'var(--chip-bg)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
@@ -85,20 +85,20 @@ export const BuildTheSystemCard: React.FC<Props> = ({ data }) => {
           if (isSubmitted) {
             const isSlotCorrect = assignedBlockId === slot.correctBlockId;
             slotStyle.borderStyle = 'solid';
-            slotStyle.borderColor = isSlotCorrect ? 'rgba(16, 185, 129, 0.5)' : 'rgba(244, 63, 94, 0.5)';
-            slotStyle.background = isSlotCorrect ? 'rgba(16, 185, 129, 0.15)' : 'rgba(244, 63, 94, 0.15)';
+            slotStyle.borderColor = isSlotCorrect ? 'var(--badge-emerald-border)' : 'rgba(244, 63, 94, 0.4)';
+            slotStyle.background = isSlotCorrect ? 'var(--badge-emerald-bg)' : 'rgba(244, 63, 94, 0.15)';
           }
 
           return (
             <motion.div key={slot.slotId} onClick={() => handleSlotTap(slot.slotId)} style={slotStyle}>
-              <span style={{ fontSize: '12px', color: '#94a3b8', fontWeight: 600 }}>{slot.label}</span>
+              <span style={{ fontSize: '12px', color: 'var(--text-muted)', fontWeight: 600 }}>{slot.label}</span>
               {assignedBlock ? (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#818cf8', fontWeight: 700, fontSize: '13px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--accent-primary)', fontWeight: 700, fontSize: '13px' }}>
                   {IconComp && <IconComp size={16} />}
                   <span>{assignedBlock.label}</span>
                 </div>
               ) : (
-                <span style={{ fontSize: '12px', color: '#64748b', fontStyle: 'italic' }}>[ Empty Slot ]</span>
+                <span style={{ fontSize: '12px', color: 'var(--text-dim)', fontStyle: 'italic' }}>[ Empty Slot ]</span>
               )}
             </motion.div>
           );
@@ -120,9 +120,9 @@ export const BuildTheSystemCard: React.FC<Props> = ({ data }) => {
                 style={{
                   padding: '8px 12px',
                   borderRadius: '10px',
-                  border: isSelected ? '2px solid #818cf8' : '1px solid rgba(255, 255, 255, 0.15)',
-                  background: isSelected ? 'rgba(99, 102, 241, 0.25)' : 'rgba(255, 255, 255, 0.05)',
-                  color: '#f8fafc',
+                  border: isSelected ? '2px solid var(--accent-primary)' : '1px solid var(--border-subtle)',
+                  background: isSelected ? 'var(--badge-indigo-bg)' : 'var(--chip-bg)',
+                  color: 'var(--text-main)',
                   fontSize: '12px',
                   fontWeight: 600,
                   display: 'flex',
@@ -131,7 +131,7 @@ export const BuildTheSystemCard: React.FC<Props> = ({ data }) => {
                   cursor: 'pointer'
                 }}
               >
-                <IconComp size={14} color="#818cf8" />
+                <IconComp size={14} color="var(--accent-primary)" />
                 <span>{block.label}</span>
               </motion.button>
             );
@@ -158,15 +158,15 @@ export const BuildTheSystemCard: React.FC<Props> = ({ data }) => {
               marginTop: 'auto',
               padding: '12px',
               borderRadius: '14px',
-              background: isCorrect ? 'rgba(16, 185, 129, 0.12)' : 'rgba(99, 102, 241, 0.12)',
-              border: `1px solid ${isCorrect ? 'rgba(16, 185, 129, 0.3)' : 'rgba(99, 102, 241, 0.3)'}`
+              background: isCorrect ? 'var(--badge-emerald-bg)' : 'var(--badge-indigo-bg)',
+              border: `1px solid ${isCorrect ? 'var(--badge-emerald-border)' : 'var(--badge-indigo-border)'}`
             }}
           >
-            <div style={{ fontSize: '13px', fontWeight: 700, color: isCorrect ? '#34d399' : '#818cf8', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <div style={{ fontSize: '13px', fontWeight: 700, color: isCorrect ? 'var(--accent-emerald)' : 'var(--accent-primary)', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '6px' }}>
               {isCorrect ? <CheckCircle2 size={16} /> : <Zap size={16} />}
               {isCorrect ? 'System Operational!' : 'Architecture Note:'}
             </div>
-            <div style={{ fontSize: '12px', lineHeight: 1.5, color: '#cbd5e1' }}>
+            <div style={{ fontSize: '12px', lineHeight: 1.5, color: 'var(--text-main)' }}>
               {data.explanation}
             </div>
           </motion.div>
