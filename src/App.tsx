@@ -4,6 +4,7 @@ import { fetchOrCreateLesson } from './services/api';
 import { HomeScreen } from './components/HomeScreen';
 import { LessonDeckScreen } from './components/LessonDeckScreen';
 import { ThemeProvider } from './context/ThemeContext';
+import { Analytics } from '@vercel/analytics/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, Loader2 } from 'lucide-react';
 
@@ -115,6 +116,7 @@ export function App() {
   return (
     <ThemeProvider>
       <AppContent />
+      <Analytics />
     </ThemeProvider>
   );
 }
