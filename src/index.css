@@ -69,14 +69,36 @@ html, body, #root {
 
 /* Custom Scrollbar inside scrollable cards */
 ::-webkit-scrollbar {
-  width: 4px;
+  width: 5px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--border-strong);
+  background: rgba(255, 255, 255, 0.2);
   border-radius: 4px;
+}
+
+/* Glassmorphism Card Container & Scrollability */
+.glass-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 24px;
+  padding: 24px;
+  backdrop-filter: blur(16px);
+  box-shadow: var(--glass-shadow);
+}
+
+.scrollable-card {
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+}
+
+.scrollable-card > div {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Tactile Button Base */
@@ -116,16 +138,6 @@ html, body, #root {
 .tactile-btn-secondary:active {
   background: rgba(255, 255, 255, 0.1);
   transform: scale(0.97);
-}
-
-/* Glassmorphism Card Container */
-.glass-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
-  border-radius: 24px;
-  padding: 24px;
-  backdrop-filter: blur(16px);
-  box-shadow: var(--glass-shadow);
 }
 
 /* Code Badge & Snippet Styling */

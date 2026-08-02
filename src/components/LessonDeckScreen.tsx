@@ -176,7 +176,7 @@ export const LessonDeckScreen: React.FC<Props> = ({ lesson, onExit, onSelectNext
         </div>
       </div>
 
-      {/* Card Deck Viewport */}
+      {/* Card Deck Viewport - Smooth Scrolling Container */}
       <div style={{ flex: 1, position: 'relative', overflow: 'hidden' }}>
         <AnimatePresence mode="wait">
           <motion.div
@@ -191,7 +191,7 @@ export const LessonDeckScreen: React.FC<Props> = ({ lesson, onExit, onSelectNext
               if (info.offset.x < -60) handleNext();
               if (info.offset.x > 60) handlePrev();
             }}
-            className="glass-card"
+            className="glass-card scrollable-card"
             style={{
               width: '100%',
               height: '100%',
@@ -199,7 +199,9 @@ export const LessonDeckScreen: React.FC<Props> = ({ lesson, onExit, onSelectNext
               flexDirection: 'column',
               position: 'absolute',
               top: 0,
-              left: 0
+              left: 0,
+              overflowY: 'auto',
+              WebkitOverflowScrolling: 'touch'
             }}
           >
             {renderCardContent(currentCard)}
