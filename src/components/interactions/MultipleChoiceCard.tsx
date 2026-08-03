@@ -14,6 +14,12 @@ export const MultipleChoiceCard: React.FC<Props> = ({ data, onAnswerSelected }) 
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [userFirstTapId, setUserFirstTapId] = useState<string | null>(null);
 
+  const [options] = useState(() => {
+    const orig = data.options || [];
+    if (orig.length <= 1) return [...orig];
+    return [...orig].sort(() => Math.random() - 0.5);
+  });
+
   const handleSelect = (optionId: string, isCorrect: boolean) => {
     // Record first attempt for score tracking & haptics
     if (!userFirstTapId) {
@@ -61,7 +67,7 @@ export const MultipleChoiceCard: React.FC<Props> = ({ data, onAnswerSelected }) 
 
       {/* Option Cards */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-        {data.options.map((opt, i) => {
+        {options.map((opt, i) => {
           const isFocused = selectedId === opt.id;
           const isFirstTapped = userFirstTapId === opt.id;
           const isAnswered = selectedId !== null;

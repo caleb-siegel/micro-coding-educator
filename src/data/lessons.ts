@@ -1,4 +1,5 @@
-import type { Lesson, Topic, Difficulty } from '../types/lesson';
+import type { Lesson, LessonCard, Topic, Difficulty } from '../types/lesson';
+
 
 export const LESSONS: Lesson[] = [
   // 1. System Design - Foundational
@@ -123,6 +124,40 @@ export const LESSONS: Lesson[] = [
           ]
         },
         explanation: 'Directly querying the primary database without an in-memory Redis cluster or read replica caused catastrophic lock contention on hot video metadata!'
+      },
+      {
+        id: 'card-3b',
+        type: 'debug_session',
+        bugTitle: 'Concurrency Deadlock in Video Access Token Verification',
+        symptom: '1 in 50 concurrent video stream requests freeze indefinitely until timeout.',
+        stackTraceOrLog: 'ERROR 2026-08-02 21:04:12 [auth_worker_pool] DeadlockDetected: Thread-42 waiting on lock held by Thread-19\n  at verify_and_renew_token (auth_service.py:14)',
+        codeSnippet: {
+          filename: 'auth_service.py',
+          language: 'python',
+          lines: [
+            { lineNumber: 10, code: 'def verify_and_renew_token(user_id, token):', isBuggyLine: false },
+            { lineNumber: 11, code: '    user_lock.acquire()', isBuggyLine: false },
+            { lineNumber: 12, code: '    session = db.get_session(user_id)', isBuggyLine: false },
+            { lineNumber: 13, code: '    db_lock.acquire()  # Acquires DB lock while holding user lock', isBuggyLine: false },
+            { lineNumber: 14, code: '    token_lock.acquire() # Re-acquires locks out-of-order!', isBuggyLine: true },
+            { lineNumber: 15, code: '    return session.renew()', isBuggyLine: false }
+          ]
+        },
+        fixOptions: [
+          {
+            id: 'fix-1',
+            patchCode: 'Enforce strict lock ordering: acquire token_lock -> user_lock -> db_lock',
+            isCorrectFix: true,
+            explanation: 'Correct! Circular wait deadlocks are eliminated by establishing a single global lock acquisition order.'
+          },
+          {
+            id: 'fix-2',
+            patchCode: 'Wrap token_lock.acquire() in time.sleep(0.5)',
+            isCorrectFix: false,
+            explanation: 'Adding sleep only delays the lock contention and degrades throughput further.'
+          }
+        ],
+        explanation: 'Acquiring multiple locks in inconsistent order causes classic circular-wait deadlocks under high concurrency. Enforcing global lock order or using atomic CAS operations resolves thread stalls.'
       },
       {
         id: 'card-4',
@@ -492,9 +527,8 @@ function createCustomDynamicLesson(customTopic: string, difficulty: Difficulty):
   };
 }
 
-export function getLessonByTopicAndDuration(
+export function getLessonByTopicAndDifficulty(
   topic: Topic,
-  durationMinutes: number,
   difficulty?: Difficulty
 ): Lesson {
   let selectedLesson: Lesson;
@@ -503,7 +537,6 @@ export function getLessonByTopicAndDuration(
     const randomIndex = Math.floor(Math.random() * LESSONS.length);
     selectedLesson = { ...LESSONS[randomIndex] };
   } else {
-    // Check if topic matches an existing preloaded lesson
     const searchKey = topic.toLowerCase().trim();
     const match = LESSONS.find(
       (l) => l.topic.toLowerCase() === searchKey || searchKey.includes(l.topic.toLowerCase())
@@ -523,6 +556,105 @@ export function getLessonByTopicAndDuration(
     }
   }
 
-  selectedLesson.durationMinutes = durationMinutes;
-  return selectedLesson;
+  // Filter out takeaway cards
+  return {
+    ...selectedLesson,
+    cards: selectedLesson.cards.filter((c) => c.type !== 'takeaway')
+  };
 }
+
+export function getLessonByTopicAndDuration(
+  topic: Topic,
+  _durationMinutes: number,
+  difficulty?: Difficulty
+): Lesson {
+  return getLessonByTopicAndDifficulty(topic, difficulty);
+}
+
+export function getInitialPracticeSession(
+  topic: Topic,
+  difficulty: Difficulty = 'Foundational'
+): Lesson {
+  return getLessonByTopicAndDifficulty(topic, difficulty);
+}
+
+export function getFallbackNextCards(
+  topic: Topic,
+  _difficulty: Difficulty = 'Foundational',
+  count: number = 2
+): LessonCard[] {
+  const capTopic = topic.trim().charAt(0).toUpperCase() + topic.trim().slice(1);
+  const cards: LessonCard[] = [];
+  const cardTypes = ['multiple_choice', 'build_the_system', 'choose_the_tradeoff', 'spot_the_mistake'];
+
+  for (let i = 0; i < count; i++) {
+    const id = `fallback-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
+    const cardType = cardTypes[Math.floor(Math.random() * cardTypes.length)];
+
+    if (cardType === 'multiple_choice') {
+      cards.push({
+        id,
+        type: 'multiple_choice',
+        question: `How does ${capTopic} optimize system performance under load?`,
+        hint: `Consider how ${capTopic} reduces CPU and I/O bottlenecks.`,
+        simpleExplanation: `${capTopic} spreads workload evenly so no single component gets overwhelmed.`,
+        options: [
+          {
+            id: `${id}-opt1`,
+            text: `Decouples components and reduces latency for ${capTopic}`,
+            isCorrect: true,
+            explanation: `Correct! Sound architecture in ${capTopic} prevents single-point bottlenecks.`
+          },
+          {
+            id: `${id}-opt2`,
+            text: `Eliminates network transmission latency completely`,
+            isCorrect: false,
+            explanation: `Physical network latency still applies.`
+          }
+        ]
+      });
+    } else if (cardType === 'spot_the_mistake') {
+      cards.push({
+        id,
+        type: 'spot_the_mistake',
+        instruction: `Tap the bottleneck component in this ${capTopic} flow:`,
+        contextCodeOrDiagram: {
+          type: 'diagram',
+          content: `${capTopic} Flow -> Uncached Direct DB Read`,
+          nodes: [
+            { id: 'n1', label: 'API Gateway', isMistake: false, subtext: 'Rate limited' },
+            { id: 'n2', label: 'Uncached DB Read', isMistake: true, subtext: 'Lock contention risk!' }
+          ]
+        },
+        explanation: `Directly reading disk storage without an in-memory Redis cache causes heavy latency under traffic spikes.`
+      });
+    } else {
+      cards.push({
+        id,
+        type: 'choose_the_tradeoff',
+        scenario: `What is the primary architectural trade-off when scaling ${capTopic}?`,
+        options: [
+          {
+            id: `${id}-t1`,
+            title: `Horizontal Scaling & In-Memory Caching`,
+            pros: ['Sub-millisecond read times', 'Scales across instances'],
+            cons: ['Eventual consistency management'],
+            isBestChoice: true,
+            why: `Caching in RAM offers immense throughput wins for ${capTopic}.`
+          },
+          {
+            id: `${id}-t2`,
+            title: `Single Giant Server Instance`,
+            pros: ['Simple setup'],
+            cons: ['Single point of failure', 'Hard scaling limit'],
+            isBestChoice: false,
+            why: `Vertical scaling hits hardware boundaries quickly.`
+          }
+        ]
+      });
+    }
+  }
+
+  return cards;
+}
+

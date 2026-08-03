@@ -21,6 +21,12 @@ export const BuildTheSystemCard: React.FC<Props> = ({ data }) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
 
+  const [shuffledBlocks] = useState(() => {
+    const orig = data.availableBlocks || [];
+    if (orig.length <= 1) return [...orig];
+    return [...orig].sort(() => Math.random() - 0.5);
+  });
+
   const handleBlockTap = (blockId: string) => {
     if (isSubmitted) return;
     sounds.playSelect();
@@ -108,7 +114,7 @@ export const BuildTheSystemCard: React.FC<Props> = ({ data }) => {
       {/* Available Blocks Pool */}
       {!isSubmitted && (
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-          {data.availableBlocks.map((block) => {
+          {shuffledBlocks.map((block) => {
             const isSelected = selectedBlockId === block.id;
             const IconComp = ICON_COMPONENTS[block.icon] || Database;
 

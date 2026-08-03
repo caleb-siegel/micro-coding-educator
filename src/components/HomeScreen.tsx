@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { Topic, Difficulty } from '../types/lesson';
-import { Zap, Clock, Sparkles, Target, Edit3 } from 'lucide-react';
+import { Zap, Sparkles, Target, Edit3 } from 'lucide-react';
 import { sounds } from '../utils/audio';
 import { ThemeToggle } from './ThemeToggle';
 
 interface Props {
-  onStartSession: (topic: Topic, duration: number, difficulty: Difficulty) => void;
+  onStartSession: (topic: Topic, difficulty: Difficulty) => void;
 }
 
 const TOPICS: { name: string; icon: string }[] = [
@@ -27,13 +27,10 @@ const DIFFICULTIES: { name: Difficulty; label: string; badgeColor: string }[] = 
   { name: 'Staff Level', label: '🔥 Deep', badgeColor: 'var(--accent-rose)' }
 ];
 
-const DURATIONS = [3, 5, 10];
-
 export const HomeScreen: React.FC<Props> = ({ onStartSession }) => {
   const [selectedTopic, setSelectedTopic] = useState<string>('System Design');
   const [customTopicInput, setCustomTopicInput] = useState<string>('');
   const [selectedDifficulty, setSelectedDifficulty] = useState<Difficulty>('Foundational');
-  const [selectedDuration, setSelectedDuration] = useState<number>(5);
 
   const isOtherSelected = selectedTopic === 'Other...';
 
@@ -54,11 +51,6 @@ export const HomeScreen: React.FC<Props> = ({ onStartSession }) => {
     setSelectedDifficulty(diff);
   };
 
-  const handleDurationSelect = (dur: number) => {
-    sounds.playTap();
-    setSelectedDuration(dur);
-  };
-
   const handleStart = () => {
     sounds.playSuccess();
     const finalTopic = isOtherSelected && customTopicInput.trim()
@@ -67,7 +59,7 @@ export const HomeScreen: React.FC<Props> = ({ onStartSession }) => {
       ? 'Custom Architecture'
       : selectedTopic;
 
-    onStartSession(finalTopic, selectedDuration, selectedDifficulty);
+    onStartSession(finalTopic, selectedDifficulty);
   };
 
   const activeTopicDisplay = isOtherSelected
@@ -128,12 +120,12 @@ export const HomeScreen: React.FC<Props> = ({ onStartSession }) => {
           {getGreeting()}.
         </h1>
         <p style={{ fontSize: '14px', color: 'var(--text-muted)', fontWeight: 500 }}>
-          Ready for a {selectedDuration}-minute {selectedDifficulty.toLowerCase()} challenge?
+          Ready for a {selectedDifficulty.toLowerCase()} practice session?
         </p>
       </motion.div>
 
       {/* Selectors Body */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', margin: '14px 0' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', margin: '14px 0' }}>
         {/* Topic Grid */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
           <div
@@ -249,14 +241,14 @@ export const HomeScreen: React.FC<Props> = ({ onStartSession }) => {
                   whileTap={{ scale: 0.95 }}
                   onClick={() => handleDifficultySelect(diff.name)}
                   style={{
-                    padding: '10px 8px',
+                    padding: '12px 8px',
                     borderRadius: '12px',
                     border: isSelected
                       ? `2px solid ${diff.badgeColor}`
                       : '1px solid var(--border-subtle)',
                     background: isSelected ? 'var(--chip-bg-hover)' : 'var(--chip-bg)',
                     color: isSelected ? diff.badgeColor : 'var(--text-muted)',
-                    fontSize: '12px',
+                    fontSize: '13px',
                     fontWeight: 700,
                     cursor: 'pointer',
                     textAlign: 'center',
@@ -264,54 +256,6 @@ export const HomeScreen: React.FC<Props> = ({ onStartSession }) => {
                   }}
                 >
                   {diff.label}
-                </motion.button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Duration Selector */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          <div
-            style={{
-              fontSize: '11px',
-              fontWeight: 700,
-              color: 'var(--text-dim)',
-              textTransform: 'uppercase',
-              letterSpacing: '0.08em',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '4px'
-            }}
-          >
-            <Clock size={12} /> Time Limit
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px' }}>
-            {DURATIONS.map((dur) => {
-              const isSelected = selectedDuration === dur;
-
-              return (
-                <motion.button
-                  key={dur}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => handleDurationSelect(dur)}
-                  style={{
-                    padding: '10px',
-                    borderRadius: '12px',
-                    border: isSelected
-                      ? '2px solid var(--accent-primary)'
-                      : '1px solid var(--border-subtle)',
-                    background: isSelected ? 'var(--badge-indigo-bg)' : 'var(--chip-bg)',
-                    color: isSelected ? 'var(--badge-indigo-text)' : 'var(--text-muted)',
-                    fontSize: '12px',
-                    fontWeight: 700,
-                    cursor: 'pointer',
-                    textAlign: 'center',
-                    transition: 'all 0.15s ease'
-                  }}
-                >
-                  {dur} min
                 </motion.button>
               );
             })}
@@ -333,7 +277,7 @@ export const HomeScreen: React.FC<Props> = ({ onStartSession }) => {
           fontWeight: 800
         }}
       >
-        <Zap size={18} /> Start {activeTopicDisplay} Challenge
+        <Zap size={18} /> Start {activeTopicDisplay} Practice
       </motion.button>
     </div>
   );

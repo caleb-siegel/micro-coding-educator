@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, Reorder } from 'framer-motion';
 import type { TimelineCardData } from '../../types/lesson';
-import { ChevronUp, ChevronDown, CheckCircle2, History } from 'lucide-react';
+import { ChevronUp, ChevronDown, CheckCircle2, History, GripVertical } from 'lucide-react';
 import { sounds } from '../../utils/audio';
 
 interface Props {
@@ -9,7 +9,20 @@ interface Props {
 }
 
 export const TimelineCard: React.FC<Props> = ({ data }) => {
-  const [events, setEvents] = useState(data.events);
+  const [events, setEvents] = useState(() => {
+    const orig = data.events || [];
+    if (orig.length <= 1) return [...orig];
+    let shuffled = [...orig];
+    let attempts = 0;
+    do {
+      shuffled = [...orig].sort(() => Math.random() - 0.5);
+      attempts++;
+    } while (
+      attempts < 10 &&
+      shuffled.every((evt, idx) => evt.correctOrder === idx + 1)
+    );
+    return shuffled;
+  });
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
 
@@ -23,6 +36,12 @@ export const TimelineCard: React.FC<Props> = ({ data }) => {
     const temp = newEvents[index];
     newEvents[index] = newEvents[targetIdx];
     newEvents[targetIdx] = temp;
+    setEvents(newEvents);
+  };
+
+  const handleReorder = (newEvents: typeof events) => {
+    if (isSubmitted) return;
+    sounds.playTap();
     setEvents(newEvents);
   };
 
@@ -48,7 +67,12 @@ export const TimelineCard: React.FC<Props> = ({ data }) => {
         </h3>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+      <Reorder.Group
+        axis="y"
+        values={events}
+        onReorder={handleReorder}
+        style={{ display: 'flex', flexDirection: 'column', gap: '10px', padding: 0, margin: 0, listStyle: 'none' }}
+      >
         {events.map((evt, idx) => {
           let cardStyle: React.CSSProperties = {
             padding: '12px 14px',
@@ -58,7 +82,10 @@ export const TimelineCard: React.FC<Props> = ({ data }) => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            gap: '10px'
+            gap: '10px',
+            cursor: !isSubmitted ? 'grab' : 'default',
+            touchAction: 'none',
+            userSelect: 'none'
           };
 
           if (isSubmitted) {
@@ -68,8 +95,15 @@ export const TimelineCard: React.FC<Props> = ({ data }) => {
           }
 
           return (
-            <motion.div key={evt.id} layout transition={{ type: 'spring', stiffness: 400, damping: 25 }} style={cardStyle}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <Reorder.Item
+              key={evt.id}
+              value={evt}
+              dragListener={!isSubmitted}
+              whileDrag={{ scale: 1.02, boxShadow: '0 8px 24px rgba(0, 0, 0, 0.4)', zIndex: 20 }}
+              style={cardStyle}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <GripVertical size={18} color="var(--text-dim)" style={{ flexShrink: 0 }} />
                 <span
                   style={{
                     width: '24px',
@@ -100,7 +134,7 @@ export const TimelineCard: React.FC<Props> = ({ data }) => {
               </div>
 
               {!isSubmitted ? (
-                <div style={{ display: 'flex', gap: '4px' }}>
+                <div style={{ display: 'flex', gap: '4px' }} onClick={(e) => e.stopPropagation()}>
                   <button
                     onClick={() => moveEvent(idx, 'up')}
                     disabled={idx === 0}
@@ -135,10 +169,10 @@ export const TimelineCard: React.FC<Props> = ({ data }) => {
               ) : (
                 evt.correctOrder === idx + 1 && <CheckCircle2 size={18} color="var(--accent-emerald)" />
               )}
-            </motion.div>
+            </Reorder.Item>
           );
         })}
-      </div>
+      </Reorder.Group>
 
       {!isSubmitted ? (
         <motion.button

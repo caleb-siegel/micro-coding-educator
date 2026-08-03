@@ -11,6 +11,12 @@ interface Props {
 export const ChooseTheTradeoffCard: React.FC<Props> = ({ data }) => {
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
+  const [options] = useState(() => {
+    const orig = data.options || [];
+    if (orig.length <= 1) return [...orig];
+    return [...orig].sort(() => Math.random() - 0.5);
+  });
+
   const handleSelect = (optionId: string, isBest: boolean) => {
     if (selectedId) return;
     setSelectedId(optionId);
@@ -21,7 +27,7 @@ export const ChooseTheTradeoffCard: React.FC<Props> = ({ data }) => {
     }
   };
 
-  const selectedOption = data.options.find((o) => o.id === selectedId);
+  const selectedOption = options.find((o) => o.id === selectedId);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', gap: '16px' }}>
@@ -35,7 +41,7 @@ export const ChooseTheTradeoffCard: React.FC<Props> = ({ data }) => {
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-        {data.options.map((opt) => {
+        {options.map((opt) => {
           const isSelected = selectedId === opt.id;
           const isAnswered = selectedId !== null;
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, Reorder } from 'framer-motion';
 import type { DragToOrderCardData } from '../../types/lesson';
 import { ChevronUp, ChevronDown, CheckCircle2, GripVertical } from 'lucide-react';
 import { sounds } from '../../utils/audio';
@@ -9,7 +9,20 @@ interface Props {
 }
 
 export const DragToOrderCard: React.FC<Props> = ({ data }) => {
-  const [items, setItems] = useState(data.items);
+  const [items, setItems] = useState(() => {
+    const orig = data.items || [];
+    if (orig.length <= 1) return [...orig];
+    let shuffled = [...orig];
+    let attempts = 0;
+    do {
+      shuffled = [...orig].sort(() => Math.random() - 0.5);
+      attempts++;
+    } while (
+      attempts < 10 &&
+      shuffled.every((item, idx) => item.correctIndex === idx)
+    );
+    return shuffled;
+  });
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
 
@@ -23,6 +36,12 @@ export const DragToOrderCard: React.FC<Props> = ({ data }) => {
     const temp = newItems[index];
     newItems[index] = newItems[targetIndex];
     newItems[targetIndex] = temp;
+    setItems(newItems);
+  };
+
+  const handleReorder = (newItems: typeof items) => {
+    if (isSubmitted) return;
+    sounds.playTap();
     setItems(newItems);
   };
 
@@ -43,10 +62,15 @@ export const DragToOrderCard: React.FC<Props> = ({ data }) => {
         <h3 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--text-main)', marginBottom: '6px' }}>
           {data.instruction}
         </h3>
-        <p style={{ fontSize: '13px', color: 'var(--text-muted)' }}>Tap arrows or drag to arrange in correct execution order:</p>
+        <p style={{ fontSize: '13px', color: 'var(--text-muted)' }}>Drag cards or tap arrows to arrange in correct execution order:</p>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+      <Reorder.Group
+        axis="y"
+        values={items}
+        onReorder={handleReorder}
+        style={{ display: 'flex', flexDirection: 'column', gap: '10px', padding: 0, margin: 0, listStyle: 'none' }}
+      >
         {items.map((item, idx) => {
           let itemStyle: React.CSSProperties = {
             padding: '12px 14px',
@@ -56,7 +80,10 @@ export const DragToOrderCard: React.FC<Props> = ({ data }) => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            gap: '10px'
+            gap: '10px',
+            cursor: !isSubmitted ? 'grab' : 'default',
+            touchAction: 'none',
+            userSelect: 'none'
           };
 
           if (isSubmitted) {
@@ -71,21 +98,22 @@ export const DragToOrderCard: React.FC<Props> = ({ data }) => {
           }
 
           return (
-            <motion.div
+            <Reorder.Item
               key={item.id}
-              layout
-              transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+              value={item}
+              dragListener={!isSubmitted}
+              whileDrag={{ scale: 1.02, boxShadow: '0 8px 24px rgba(0, 0, 0, 0.4)', zIndex: 20 }}
               style={itemStyle}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <GripVertical size={18} color="var(--text-dim)" />
+                <GripVertical size={18} color="var(--text-dim)" style={{ flexShrink: 0 }} />
                 <span style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text-main)' }}>
                   {item.label}
                 </span>
               </div>
 
               {!isSubmitted ? (
-                <div style={{ display: 'flex', gap: '4px' }}>
+                <div style={{ display: 'flex', gap: '4px' }} onClick={(e) => e.stopPropagation()}>
                   <button
                     onClick={() => moveItem(idx, 'up')}
                     disabled={idx === 0}
@@ -120,10 +148,10 @@ export const DragToOrderCard: React.FC<Props> = ({ data }) => {
               ) : (
                 item.correctIndex === idx && <CheckCircle2 size={18} color="var(--accent-emerald)" />
               )}
-            </motion.div>
+            </Reorder.Item>
           );
         })}
-      </div>
+      </Reorder.Group>
 
       {!isSubmitted ? (
         <motion.button

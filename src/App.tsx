@@ -1,26 +1,33 @@
 import { useState } from 'react';
 import type { Topic, Difficulty, Lesson } from './types/lesson';
-import { fetchOrCreateLesson } from './services/api';
+import { startPracticeSession } from './services/api';
 import { HomeScreen } from './components/HomeScreen';
 import { LessonDeckScreen } from './components/LessonDeckScreen';
 import { ThemeProvider } from './context/ThemeContext';
 import { Analytics } from '@vercel/analytics/react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, Loader2 } from 'lucide-react';
+import { Sparkles, Loader2, AlertCircle } from 'lucide-react';
+import { sounds } from './utils/audio';
 
 function AppContent() {
   const [activeScreen, setActiveScreen] = useState<'home' | 'lesson'>('home');
   const [currentLesson, setCurrentLesson] = useState<Lesson | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [loadingTopic, setLoadingTopic] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const handleStartSession = async (topic: Topic, duration: number, difficulty: Difficulty) => {
+  const handleStartSession = async (topic: Topic, difficulty: Difficulty) => {
     setIsLoading(true);
     setLoadingTopic(topic);
+    setErrorMessage(null);
     try {
-      const lesson = await fetchOrCreateLesson(topic, duration, difficulty);
+      const lesson = await startPracticeSession(topic, difficulty);
       setCurrentLesson(lesson);
       setActiveScreen('lesson');
+    } catch (err: any) {
+      console.error('[App] Failed to load session:', err);
+      setErrorMessage(err.message || 'Failed to access practice session.');
+      sounds.playError();
     } finally {
       setIsLoading(false);
     }
@@ -34,14 +41,20 @@ function AppContent() {
   const handleSelectNextTopic = async (topic: Topic) => {
     setIsLoading(true);
     setLoadingTopic(topic);
+    setErrorMessage(null);
     try {
-      const lesson = await fetchOrCreateLesson(topic, 5, 'Foundational');
+      const lesson = await startPracticeSession(topic, 'Foundational');
       setCurrentLesson(lesson);
       setActiveScreen('lesson');
+    } catch (err: any) {
+      console.error('[App] Failed to load next topic session:', err);
+      setErrorMessage(err.message || 'Failed to access practice session.');
+      sounds.playError();
     } finally {
       setIsLoading(false);
     }
   };
+
 
   return (
     <div className="mobile-app-shell">
@@ -90,9 +103,98 @@ function AppContent() {
                 <Sparkles size={16} color="var(--accent-primary)" /> Crafting {loadingTopic} Challenge...
               </div>
               <div style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
-                Building interactive system diagrams and tactile cards
+                Generating interactive cards via AI API
               </div>
             </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Error Alert Dialog */}
+      <AnimatePresence>
+        {errorMessage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            style={{
+              position: 'absolute',
+              inset: 0,
+              zIndex: 60,
+              background: 'rgba(0, 0, 0, 0.7)',
+              backdropFilter: 'blur(12px)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '24px'
+            }}
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 10 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 10 }}
+              style={{
+                width: '100%',
+                maxWidth: '400px',
+                background: 'var(--bg-card)',
+                borderRadius: '20px',
+                border: '1px solid var(--border-subtle)',
+                padding: '24px',
+                boxShadow: '0 20px 50px rgba(0,0,0,0.5)',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '16px',
+                position: 'relative'
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div
+                  style={{
+                    width: '40px',
+                    height: '40px',
+                    borderRadius: '12px',
+                    background: 'rgba(239, 68, 68, 0.15)',
+                    border: '1px solid rgba(239, 68, 68, 0.3)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#ef4444'
+                  }}
+                >
+                  <AlertCircle size={22} />
+                </div>
+                <div>
+                  <h3 style={{ fontSize: '16px', fontWeight: 700, margin: 0, color: 'var(--text-main)' }}>
+                    Data Unavailable
+                  </h3>
+                  <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+                    Backend AI API Status Notice
+                  </span>
+                </div>
+              </div>
+
+              <div
+                style={{
+                  fontSize: '13px',
+                  color: 'var(--text-muted)',
+                  lineHeight: 1.5,
+                  background: 'var(--chip-bg)',
+                  padding: '12px',
+                  borderRadius: '10px',
+                  border: '1px solid var(--border-subtle)'
+                }}
+              >
+                {errorMessage}
+              </div>
+
+              <button
+                onClick={() => setErrorMessage(null)}
+                className="tactile-btn tactile-btn-primary"
+                style={{ width: '100%', padding: '12px' }}
+              >
+                Dismiss
+              </button>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -111,6 +213,7 @@ function AppContent() {
     </div>
   );
 }
+
 
 export function App() {
   return (

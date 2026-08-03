@@ -24,6 +24,7 @@ export type CardType =
   | 'before_vs_after'
   | 'guess_the_metric'
   | 'timeline'
+  | 'debug_session'
   | 'takeaway';
 
 export interface BaseCard {
@@ -178,6 +179,29 @@ export interface TimelineCardData extends BaseCard {
   explanation: string;
 }
 
+export interface DebugSessionCardData extends BaseCard {
+  type: 'debug_session';
+  bugTitle: string;
+  symptom: string;
+  stackTraceOrLog?: string;
+  codeSnippet: {
+    filename?: string;
+    language?: string;
+    lines: {
+      lineNumber: number;
+      code: string;
+      isBuggyLine: boolean;
+    }[];
+  };
+  fixOptions?: {
+    id: string;
+    patchCode: string;
+    isCorrectFix: boolean;
+    explanation: string;
+  }[];
+  explanation: string;
+}
+
 export interface TakeawayCardData extends BaseCard {
   type: 'takeaway';
   oneSentenceSummary: string;
@@ -197,6 +221,7 @@ export type LessonCard =
   | BeforeVsAfterCardData
   | GuessTheMetricCardData
   | TimelineCardData
+  | DebugSessionCardData
   | TakeawayCardData;
 
 export interface Lesson {
@@ -204,7 +229,8 @@ export interface Lesson {
   title: string;
   topic: Topic;
   difficulty: Difficulty;
-  durationMinutes: number;
+  durationMinutes?: number;
   subtitle: string;
   cards: LessonCard[];
 }
+
