@@ -23,6 +23,7 @@ export async function fetchOrCreateLesson(
       body: JSON.stringify({
         topic,
         difficulty,
+        durationMinutes,
       }),
       signal: controller.signal,
     });

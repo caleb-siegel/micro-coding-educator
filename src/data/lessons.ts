@@ -494,30 +494,35 @@ function createCustomDynamicLesson(customTopic: string, difficulty: Difficulty):
 
 export function getLessonByTopicAndDuration(
   topic: Topic,
-  _durationMinutes: number,
+  durationMinutes: number,
   difficulty?: Difficulty
 ): Lesson {
+  let selectedLesson: Lesson;
+
   if (topic === 'Surprise Me') {
     const randomIndex = Math.floor(Math.random() * LESSONS.length);
-    return LESSONS[randomIndex];
-  }
+    selectedLesson = { ...LESSONS[randomIndex] };
+  } else {
+    // Check if topic matches an existing preloaded lesson
+    const searchKey = topic.toLowerCase().trim();
+    const match = LESSONS.find(
+      (l) => l.topic.toLowerCase() === searchKey || searchKey.includes(l.topic.toLowerCase())
+    );
 
-  // Check if topic matches an existing preloaded lesson
-  const searchKey = topic.toLowerCase().trim();
-  const match = LESSONS.find(
-    (l) => l.topic.toLowerCase() === searchKey || searchKey.includes(l.topic.toLowerCase())
-  );
-
-  if (match) {
-    if (difficulty) {
-      const diffMatch = LESSONS.find(
-        (l) => l.topic.toLowerCase() === match.topic.toLowerCase() && l.difficulty === difficulty
-      );
-      if (diffMatch) return diffMatch;
+    if (match) {
+      if (difficulty) {
+        const diffMatch = LESSONS.find(
+          (l) => l.topic.toLowerCase() === match.topic.toLowerCase() && l.difficulty === difficulty
+        );
+        selectedLesson = diffMatch ? { ...diffMatch } : { ...match };
+      } else {
+        selectedLesson = { ...match };
+      }
+    } else {
+      selectedLesson = createCustomDynamicLesson(topic, difficulty || 'Foundational');
     }
-    return match;
   }
 
-  // If user typed a custom topic not in preloaded list, dynamically generate a custom lesson!
-  return createCustomDynamicLesson(topic, difficulty || 'Foundational');
+  selectedLesson.durationMinutes = durationMinutes;
+  return selectedLesson;
 }
